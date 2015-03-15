@@ -33,7 +33,6 @@ def run_scrapper():
     """
     running scraper.
     """
-    print "geing "
     scrapping()
  
  

@@ -76,7 +76,7 @@ def scrapping():
                     params={'editionId': carv['id']}
                 )
                 depr_tree = html.fromstring(depr_res.text)
-                tds = depr_tree.xpath('//*[@id="contentColumn"]//tr[2]/td')
+                tds = depr_tree.xpath('//*[@id="contentColumn"]//table//td')
                 full_name = tds[0].text
                 year_0 = tds[1].text
                 year_1 = tds[2].text

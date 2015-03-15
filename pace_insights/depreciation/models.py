@@ -135,20 +135,21 @@ class FinancialOption(models.Model):
     name = models.CharField(max_length=16)
     create_time = models.DateTimeField(auto_now_add=True, auto_now=True)
 
+    def __unicode__(self):
+        return self.name
 
 class Job(models.Model):
     """Class describing a computational job"""
  
     # currently, available types of job are:
     TYPES = (
-        ('fibonacci', 'fibonacci'),
-        ('power', 'power'),
+        ('scrapping', 'scrapping'),
     )
  
     # list of statuses that job can have
     STATUSES = (
-        ('pending', 'pending'),
-        ('started', 'started'),
+        ('start', 'start'),
+        ('running', 'running'),
         ('finished', 'finished'),
         ('failed', 'failed'),
     )
@@ -158,14 +159,14 @@ class Job(models.Model):
  
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    argument = models.PositiveIntegerField()
-    result = models.IntegerField(null=True)
  
+    def __unicode__(self):
+        return u'{}:{}'.format(self.job_type, self.status)
+
     def save(self, *args, **kwargs):
         """Save model and if job is in pending state, schedule it"""
         super(Job, self).save(*args, **kwargs)
-        if self.status == 'pending':
+        if self.status == 'start':
             from .tasks import TASK_MAPPING
             task = TASK_MAPPING[self.job_type]
-            print self.argument, '<<<<', task
-            task.delay(job_id=self.id, n=self.argument)
+            task.delay(job_id=self.id)

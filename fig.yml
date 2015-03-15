@@ -1,0 +1,39 @@
+# database container
+db:
+  image: postgres:9.4
+  environment:
+    - POSTGRES_DB=pace_insights
+# redis container
+redis:
+  image: redis:2.8.19
+# rabbitmq container
+rabbitmq:
+  image: tutum/rabbitmq
+  environment:
+    - RABBITMQ_PASS=paceinsight
+  ports:
+    - "5672:5672"  # we forward this port because it's useful for debugging 
+    - "15672:15672"  # here, we can access rabbitmq management plugin
+# container with Django web server
+web:
+  build: .  # build using default Dockerfile
+  command: ./run_web.sh
+  volumes:
+    - .:/app  # mount current directory inside container
+  ports:
+    - "8000:8000"
+  # set up links so that web knows about db, rabbit and redis
+  links:
+    - db:db
+    - rabbitmq:rabbit
+    - redis:redis
+# container with redis worker
+worker:
+  build: .
+  command: ./run_celery.sh
+  volumes:
+    - .:/app
+  links:
+    - db:db
+    - rabbitmq:rabbit
+    - redis:redis

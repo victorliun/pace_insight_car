@@ -1,0 +1,12 @@
+# python compiled stuff
+*.pyc
+*.pyo
+
+# text editor backups
+*~
+
+# virtualenv
+env/
+activate
+celerybeat-schedule.db
+celerybeat.pid

@@ -71,8 +71,12 @@ class FinancialOptionAdmin(admin.ModelAdmin):
     list_display = ['id', 'name','create_time']
 
 
+class JobAdmin(admin.ModelAdmin):
+    """JOb admin"""
+    list_display = ['job_type', 'status','created_at', 'updated_at']
+
 # Register your models here.
-admin.site.register(Job)
+admin.site.register(Job, JobAdmin)
 admin.site.register(CarMake, CarMakeAdmin)
 admin.site.register(CarModel, CarModelAdmin)
 admin.site.register(CarVersion, CarVersionAdmin)

@@ -1,5 +1,6 @@
 from functools import wraps
- 
+from datetime import datetime
+
 from pace_insights import celery_app
 from .models import Job
 from depreciation.scraper import scrapping
@@ -13,6 +14,7 @@ def update_job(fn):
     def wrapper(job_id, *args, **kwargs):
         job = Job.objects.get(id=job_id)
         job.status = 'running'
+        job.updated_at = datetime.now()
         job.save()
         try:
             # execute the function fn

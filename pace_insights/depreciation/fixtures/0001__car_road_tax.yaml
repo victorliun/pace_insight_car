@@ -1,0 +1,91 @@
+- model: depreciation.carroadtax
+  pk: 1
+  fields:
+    band: A
+    co2: 'Up to 100'
+    first_year_rate: '£0.00'
+    standard_rate: '£0.00'
+- model: depreciation.carroadtax
+  pk: 2
+  fields:
+    band: B
+    co2: '101 - 110'
+    first_year_rate: '£0.00'
+    standard_rate: '£20.00'
+- model: depreciation.carroadtax
+  pk: 3
+  fields:
+    band: C
+    co2: '111 - 120'
+    first_year_rate: '£0.00'
+    standard_rate: '£30.00'
+- model: depreciation.carroadtax
+  pk: 4
+  fields:
+    band: D
+    co2: '121 - 130'
+    first_year_rate: '£0.00'
+    standard_rate: '£110.0'
+- model: depreciation.carroadtax
+  pk: 5
+  fields:
+    band: E
+    co2: '131 - 140'
+    first_year_rate: '£130.00'
+    standard_rate: '£130.00'
+- model: depreciation.carroadtax
+  pk: 6
+  fields:
+    band: F
+    co2: '141 - 150'
+    first_year_rate: '£145.00'
+    standard_rate: '£145.00'
+- model: depreciation.carroadtax
+  pk: 7
+  fields:
+    band: G
+    co2: '151 - 165'
+    first_year_rate: '£180.00'
+    standard_rate: '£180.00'
+- model: depreciation.carroadtax
+  pk: 8
+  fields:
+    band: H
+    co2: '166 - 175'
+    first_year_rate: '£290.00'
+    standard_rate: '£205.00'
+- model: depreciation.carroadtax
+  pk: 9
+  fields:
+    band: I
+    co2: '176 - 185'
+    first_year_rate: '£345.00'
+    standard_rate: '£225.00'
+- model: depreciation.carroadtax
+  pk: 10
+  fields:
+    band: J
+    co2: '186 - 200'
+    first_year_rate: '£485.00'
+    standard_rate: '£265.00'
+- model: depreciation.carroadtax
+  pk: 11
+  fields:
+    band: K
+    co2: '201 - 225'
+    first_year_rate: '£635.00'
+    standard_rate: '£285.00'
+- model: depreciation.carroadtax
+  pk: 12
+  fields:
+    band: L
+    co2: '226 - 255'
+    first_year_rate: '£860.00'
+    standard_rate: '£485.00'
+- model: depreciation.carroadtax
+  pk: 13
+  fields:
+    band: M
+    co2: 'Over 255'
+    first_year_rate: '£1,090.00'
+    standard_rate: '£500.00'

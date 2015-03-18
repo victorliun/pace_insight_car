@@ -11,15 +11,14 @@ from django.db import models
 logger = logging.getLogger(__file__)
 
 
-def to_int(comma_int_str):
-    '''Return int from comma int string'''
-    if comma_int_str.startswith('£'):
-        comma_int_str = comma_int_str[2:]
-    try:
-        return int(comma_int_str.replace(',', ''))
-    except ValueError, err:
-        logger.error(err)
-        return 0
+class CarRoadTax(models.Model):
+    """
+    Model of car road tax.
+    """
+    band = models.CharField(max_length=8, unique=True)
+    co2 = models.CharField(max_length=64)
+    first_year_rate = models.CharField(max_length=64)
+    standard_rate = models.CharField(max_length=64)
 
 
 class CarMake(models.Model):
@@ -113,16 +112,31 @@ class Depreciation(models.Model):
     year_2 = models.CharField(max_length=16)
     year_3 = models.CharField(max_length=16)
     year_4 = models.CharField(max_length=16)
+    year_0_mock = models.CharField(max_length=16, blank=True)
+    year_1_mock = models.CharField(max_length=16, blank=True)
+    year_2_mock = models.CharField(max_length=16, blank=True)
+    year_3_mock = models.CharField(max_length=16, blank=True)
+    year_4_mock = models.CharField(max_length=16, blank=True)
 
     def __unicode___(self):
         return u"{}:[{}, {}, {}, {}, {}]".format(
             self.car_version.full_name,
-            year_0,
-            year_1,
-            year_2,
-            year_3,
-            year_4,
+            (year_0, year_0_mock),
+            (year_1, year_1_mock),
+            (year_2, year_2_mock),
+            (year_3, year_3_mock),
+            (year_4, year_4_mock),
         )
+
+    def get_raw_data(self):
+        '''Return original depreciation data'''
+        return [self.year_0, self.year_1,
+            self.year_2, self.year_3, self.year_4]
+
+    def get_addon_data(self):
+        '''Return original depreciation data'''
+        return [self.year_0_mock, self.year_1_mock,
+            self.year_2_mock, self.year_3_mock, self.year_4_mock]
 
     class Meta:
         verbose_name_plural = 'Depreciations'
@@ -137,6 +151,7 @@ class FinancialOption(models.Model):
 
     def __unicode__(self):
         return self.name
+
 
 class Job(models.Model):
     """Class describing a computational job"""

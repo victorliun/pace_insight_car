@@ -11,6 +11,7 @@ from depreciation.models import (
     CarVersion,
     Depreciation,
     FinancialOption,
+    CarRoadTax,
 )
 
 
@@ -61,8 +62,9 @@ class CarVersionAdmin(admin.ModelAdmin):
 
 class DepreciationAdmin(admin.ModelAdmin):
     """CarMake admin"""
-    list_display = ['id', 'car_version', 'year_0', 'year_1', 'year_2',
-        'year_3', 'year_4', 'create_time']
+    list_display = ['id', 'car_version', 'year_0', 'year_0_mock', 'year_1',
+        'year_1_mock', 'year_2', 'year_2_mock', 'year_3', 'year_3_mock',
+        'year_4', 'year_4_mock', 'create_time']
     list_filter = ('car_version__car_model__car_make',)
 
 
@@ -75,10 +77,17 @@ class JobAdmin(admin.ModelAdmin):
     """JOb admin"""
     list_display = ['job_type', 'status','created_at', 'updated_at']
 
+
+class CarRoadTaxAdmin(admin.ModelAdmin):
+    """JOb admin"""
+    list_display = ['id', 'band', 'co2','first_year_rate',
+        'standard_rate']
+
 # Register your models here.
 admin.site.register(Job, JobAdmin)
 admin.site.register(CarMake, CarMakeAdmin)
 admin.site.register(CarModel, CarModelAdmin)
+admin.site.register(CarRoadTax, CarRoadTaxAdmin)
 admin.site.register(CarVersion, CarVersionAdmin)
 admin.site.register(Depreciation, DepreciationAdmin)
 admin.site.register(FinancialOption, FinancialOptionAdmin)

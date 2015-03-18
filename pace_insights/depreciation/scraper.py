@@ -8,7 +8,8 @@ import logging
 import requests
 from lxml import html
 
-from models import CarMake, CarModel, CarVersion, Depreciation
+from .models import CarMake, CarModel, CarVersion, Depreciation
+from .utils import make_new_depreciation
 
 
 logger = logging.getLogger(__name__)
@@ -94,8 +95,17 @@ def scrapping():
                     year_3=year_3,
                     year_4=year_4
                 )[0]
+                if not car_depr.year_0_mock:
+                    car_depr.year_0_mock = make_new_depreciation(year_0)
+                    car_depr.year_1_mock = make_new_depreciation(year_1)
+                    car_depr.year_2_mock = make_new_depreciation(year_2)
+                    car_depr.year_3_mock = make_new_depreciation(year_3)
+                    car_depr.year_4_mock = make_new_depreciation(year_4)
+                    car_depr.save()
+
                 print msg
                 logger.info(msg)
+
 
 if __name__ == '__main__':
     scrapping()

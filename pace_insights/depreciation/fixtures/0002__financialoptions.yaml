@@ -1,0 +1,21 @@
+- model: depreciation.financialoption
+  pk: 1
+  fields:
+    name: HP
+    create_time: "2015-03-18T20:41:28+00:00" 
+- model: depreciation.financialoption
+  pk: 2
+  fields:
+    name: PCP
+    create_time: "2015-03-18T20:41:28+00:00" 
+- model: depreciation.financialoption
+  pk: 3
+  fields:
+    name: Leas
+    create_time: "2015-03-18T20:41:28+00:00" 
+- model: depreciation.financialoption
+  pk: 4
+  fields:
+    name: Loan
+    create_time: "2015-03-18T20:41:28+00:00" 
+

@@ -17,5 +17,9 @@ shell:
 .PHONY : shell
 
 test:
-	$(VIRTUALENV) && python pace_insights/manage.py test depreciation
+	$(VIRTUALENV) && python pace_insights/manage.py test $(ARGS) depreciation
 .PHONY : test
+
+setup:
+	$(VIRTUALENV) && pip install -r requirements.txt
+.PHONY : setup

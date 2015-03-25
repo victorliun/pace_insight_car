@@ -1,0 +1,54 @@
+[
+    {
+        "fields": {
+            "year_4": "£314,315", 
+            "year_0": "£330,805", 
+            "year_1": "£324,826", 
+            "year_2": "£320,414", 
+            "year_3": "£316,761", 
+            "year_3_mock": "£316,761", 
+            "year_1_mock": "£324,798", 
+            "year_4_mock": "£314,317", 
+            "create_time": "2015-03-18T21:39:22.597Z", 
+            "car_version": 1841, 
+            "year_2_mock": "£320,443", 
+            "year_0_mock": "£330,760"
+        }, 
+        "model": "depreciation.depreciation", 
+        "pk": 1841
+    }, 
+    {
+        "fields": {
+            "update_time": "2015-03-18T21:39:22.391Z", 
+            "name": "Hatchback 2.0 TSI 300 R 5dr", 
+            "body_range": "Hatchback", 
+            "car_model": 200, 
+            "create_time": "2015-03-18T21:39:22.391Z", 
+            "doors": 5, 
+            "whatcar_id": 44010
+        }, 
+        "model": "depreciation.carversion", 
+        "pk": 1841
+    }, 
+    {
+        "fields": {
+            "update_time": "2015-03-18T21:39:11.002Z", 
+            "car_make": 43, 
+            "create_time": "2015-03-18T21:39:11.002Z", 
+            "name": "Golf NEW", 
+            "whatcar_id": 41303
+        }, 
+        "model": "depreciation.carmodel", 
+        "pk": 200
+    }, 
+    {
+        "fields": {
+            "update_time": "2015-03-18T21:38:36.336Z", 
+            "create_time": "2015-03-18T21:38:36.336Z", 
+            "name": "Volkswagen", 
+            "whatcar_id": 25321
+        }, 
+        "model": "depreciation.carmake", 
+        "pk": 43
+    }
+]

@@ -5,10 +5,11 @@ django-celery==3.1.16
 django==1.7.5
 ipython==3.0.0
 lxml==3.4.2
+numpy==1.9.1
 psycopg2==2.6
+pyyaml==3.11
 redis==2.10.3
 requests==2.5.3
 scrapy==0.24.5
 selenium==2.45.0
 service_identity==14.0.0
-pyyaml==3.11

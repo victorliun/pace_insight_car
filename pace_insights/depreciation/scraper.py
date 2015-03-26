@@ -103,7 +103,6 @@ def scrapping():
                     car_depr.year_4_mock = make_new_depreciation(year_4)
                     car_depr.save()
 
-                print msg
                 logger.info(msg)
 
 

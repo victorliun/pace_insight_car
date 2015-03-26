@@ -27,12 +27,12 @@ class FinancialOptionsTest(TestCase):
             car_version=self.car_version
         )
         self.assertEqual(hp.finance_value, 29905)
-        self.assertEqual(hp.actual_monthly, -716)
+        self.assertEqual(hp.actual_monthly, 716.11)
         self.assertEqual(hp.equity_value, 15522)
         self.assertEqual(hp.effective_rate, 0.07)
-        self.assertEqual(hp.value_score(180), 19572)
-        self.assertEqual(hp.real_world_monthly(180), 408)
-        self.assertEqual(hp.total_payable(180), 35094)
+        self.assertEqual(hp.total_payable(180), 35093.28)
+        self.assertEqual(hp.value_score(180), 19571.28)
+        self.assertEqual(hp.real_world_monthly(180), 407.73)
 
     def test_pcp(self):
         pcp = PCP(
@@ -44,11 +44,14 @@ class FinancialOptionsTest(TestCase):
             car_version=self.car_version
         )
         self.assertEqual(pcp.finance_value, 29905)
-        self.assertEqual(pcp.actual_monthly, 463)
-        self.assertEqual(pcp.equity_value, 1552)
-        self.assertEqual(pcp.value_score(180), 23967)
-        self.assertEqual(pcp.real_world_monthly(180), 500)
-        self.assertEqual(pcp.total_payable(180), 15528)
+        self.assertEqual(pcp.ballon_est, 13969.8)
+        self.assertEqual(pcp.equity_value, 15522)
+        self.assertEqual(pcp.pure_equity_value(), 1552.20)
+        pcp.set_loan_at_end(pcp.ballon_est)
+        self.assertEqual(pcp.actual_monthly, 463.08)
+        self.assertEqual(pcp.total_payable(180), 25527.84)
+        self.assertEqual(pcp.value_score(180), 23975.64)
+        self.assertEqual(pcp.real_world_monthly(180), 499.49)
 
     def test_lease(self):
         lease = Lease(
@@ -61,14 +64,14 @@ class FinancialOptionsTest(TestCase):
             car_version=self.car_version
         )
         self.assertEqual(lease.finance_value, 29905)
-        self.assertEqual(lease.actual_monthly, 408)
+        self.assertEqual(lease.actual_monthly, 313.30)
         self.assertEqual(lease.excess_mile_charges(
             actual_annual=8000,
             include=8000), 0)
-        self.assertEqual(lease.effective_cost, 9786)
-        self.assertEqual(lease.effective_monthly, 408)
-        self.assertEqual(lease.total_payable(), 9786)
-        self.assertEqual(lease.value_score(200), 9986)
+        self.assertEqual(lease.effective_cost, 9785.90)
+        self.assertEqual(lease.effective_monthly, 407.75)
+        self.assertEqual(lease.total_payable(), 9785.90)
+        self.assertEqual(lease.value_score(200), 9985.90)
 
 
     def test_loan(self):
@@ -81,8 +84,8 @@ class FinancialOptionsTest(TestCase):
             car_version=self.car_version
         )
         self.assertEqual(loan.finance_value, 29905)
-        self.assertEqual(loan.actual_monthly, -674)
-        self.assertEqual(loan.equity_value, 1552)
-        self.assertEqual(loan.value_score(180), 17545)
-        self.assertEqual(loan.real_world_monthly(180), 366)
-        self.assertEqual(loan.total_payable(180), 720)
+        self.assertEqual(loan.actual_monthly, 673.89)
+        self.assertEqual(loan.equity_value, 15522)
+        self.assertEqual(loan.value_score(180), 17544.72)
+        self.assertEqual(loan.real_world_monthly(180), 365.52)
+        self.assertEqual(loan.total_payable(180), 33066.72)

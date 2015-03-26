@@ -28,9 +28,8 @@ class FinancailOption(object):
             '-create_time')[0]
         depr_profile = DepreciationProfile(
             depreciation.get_raw_data(),
-            int_to_str(self.finance_value)
+            int_to_str(stick_price)
         )
-
         last_depr = depr_profile.exact_depreciations[-1]
         self.last_depr = last_depr.amount
 
@@ -40,17 +39,17 @@ class FinancailOption(object):
         actual_monthly = numpy.pmt(
             self.loan_at / 12,
             self.total_months,
-            self.finance_value,
+            -self.finance_value,
             self.loan_at_end
         )
         logger.info('numpy.pmt({},{},{},{})={}'.format(
             self.loan_at / 12,
             self.total_months,
-            self.finance_value,
+            -self.finance_value,
             self.loan_at_end,
             actual_monthly
         ))
-        return int(round(actual_monthly))
+        return round(actual_monthly, 2)
 
     @property
     def equity_value(self):
@@ -76,8 +75,8 @@ class FinancailOption(object):
         """Real world out of pocket money for this car.
         This will show real value of buying the car.
         """
-
-        return self.value_score(tax_per_year) / self.total_months
+        real_world_pay = self.value_score(tax_per_year) / self.total_months
+        return round(real_world_pay, 2)
 
 
 class HP(FinancailOption):
@@ -91,19 +90,33 @@ class PCP(FinancailOption):
         self.ballon_value = ballon_value
         super(PCP, self).__init__(*args, **kwargs)
 
-    def ballon_est(self):
-        self.ballon_est = int(round(self.ballon_value * self.equity_value))
+    def set_loan_at_end(self, loan_at_end):
+        self.loan_at_end = loan_at_end
 
+    @property
     def equity_value(self):
-        return self.last_depr - self.ballon_est
+        return self.last_depr
+
+    @property
+    def ballon_est(self):
+        ballon_est = round(self.ballon_value * self.equity_value, 2)
+        return ballon_est
+
+    def pure_equity_value(self):
+        pev = round(self.equity_value - self.ballon_est, 2)
+        return pev
 
     def total_payable(self, tax_per_year=0):
         '''
+        Total money to pay.
         '''
         finance = self.actual_monthly * self.total_months
         tax = tax_per_year * self.total_months / 12
 
         return self.total_up_front + finance + tax
+
+    def value_score(self, tax_per_year=0):
+        return self.total_payable(tax_per_year) - self.pure_equity_value()
 
 
 class Loan(FinancailOption):
@@ -116,15 +129,15 @@ class Lease(FinancailOption):
 
     def __init__(self, initial_payment, monthly, extras, *args, **kwargs):
         super(Lease, self).__init__(*args, **kwargs)
-        self.initial_payment = int(round(initial_payment * VAT))
-        self.monthly = int(round(monthly * VAT))
-        self.monthly_extras = extras / self.total_months
+        self.initial_payment = round(initial_payment * VAT, 2)
+        self.monthly = round(monthly * VAT, 2)
+        self.monthly_extras = round(extras * 1.0 / self.total_months, 2)
 
     @property
     def actual_monthly(self):
         return self.monthly + self.monthly_extras
 
-    def exess_mile_charges(self, actual_annual=8000,
+    def excess_mile_charges(self, actual_annual=8000,
             include=8000, price_per_mile=0.20):
         # price per mile include VAT
         excess = actual_annual - include
@@ -132,13 +145,14 @@ class Lease(FinancailOption):
 
     @property
     def effective_cost(self):
-        return self.initial_payment + self.actual_monthly * (
-            self.total_months - 1)
+        total_instalment = round(self.actual_monthly * (
+            self.total_months - 1), 2)
+        return self.initial_payment + total_instalment
         
 
     @property
     def effective_monthly(self):
-        return self.effective_cost / self.total_months
+        return round(self.effective_cost / self.total_months, 2)
 
 
     def total_payable(self):

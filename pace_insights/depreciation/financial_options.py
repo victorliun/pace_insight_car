@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Depreciation App: tests
+Depreciation App: financial options
 """
+from __future__ import unicode_literals
 import numpy
 import logging
-from __future__ import unicode_literals
 
-from depreciation.utils import Price, DepreciationProfile
+from depreciation.utils import Price, DepreciationProfile, int_to_str
 
-logger = logging.getLogger(__main__)
+logger = logging.getLogger(__name__)
 
 
 class FinancailOption(object):
@@ -24,11 +24,11 @@ class FinancailOption(object):
 
         if car_version is None:
             raise Exception('Invalid car version')
-        depreciation = car_version.depreciations.object.order_by(
+        depreciation = car_version.depreciations.order_by(
             '-create_time')[0]
         depr_profile = DepreciationProfile(
-            depreciation.get_addon_data,
-            self.finance_value
+            depreciation.get_raw_data(),
+            int_to_str(self.finance_value)
         )
 
         last_depr = depr_profile.exact_depreciations[-1]
@@ -40,13 +40,13 @@ class FinancailOption(object):
         actual_monthly = numpy.pmt(
             self.loan_at / 12,
             self.total_months,
-            self.finance_value
+            self.finance_value,
             self.loan_at_end
         )
         logger.info('numpy.pmt({},{},{},{})={}'.format(
             self.loan_at / 12,
             self.total_months,
-            self.finance_value
+            self.finance_value,
             self.loan_at_end,
             actual_monthly
         ))
@@ -72,12 +72,12 @@ class FinancailOption(object):
 
         return out_of_pocket
 
-    def real_world_monthly(self):
+    def real_world_monthly(self, tax_per_year=0):
         """Real world out of pocket money for this car.
         This will show real value of buying the car.
         """
 
-        return self.value_score() / self.total_months
+        return self.value_score(tax_per_year) / self.total_months
 
 
 class HP(FinancailOption):
@@ -85,13 +85,14 @@ class HP(FinancailOption):
 
 
 class PCP(FinancailOption):
-     name = 'PCP'
+    name = 'PCP'
 
-     def __init__(self, ballon_value=0, *args, **kwargs):
+    def __init__(self, ballon_value=0, *args, **kwargs):
         self.ballon_value = ballon_value
         super(PCP, self).__init__(*args, **kwargs)
+
+    def ballon_est(self):
         self.ballon_est = int(round(self.ballon_value * self.equity_value))
-        self.loan_at_end = self.ballon_est
 
     def equity_value(self):
         return self.last_depr - self.ballon_est

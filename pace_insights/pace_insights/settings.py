@@ -14,6 +14,7 @@ import os
 from kombu import Exchange, Queue
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+FIXTURE_DIRS = (os.path.join(BASE_DIR, 'depreciation/tests/fixtures'),)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/

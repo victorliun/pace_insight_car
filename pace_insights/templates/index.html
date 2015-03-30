@@ -1,0 +1,13 @@
+{% load staticfiles %}
+<!doctype html>
+<html lang="en" ng-app="djangular-demo">
+  <head>
+    <title>{{site_title}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="{% static 'bootstrap-3.3.4/css/bootstrap.min.css'%}" rel="stylesheet" />
+  </head>
+  <body>
+    <h1>Welcome to car finance compared. </h1>
+    <a href='/admin/'>Go to admin page.</a>
+    <script src="{% static 'vendor/angular.min.js' %}" type="text/javascript"></script>
+  </body>

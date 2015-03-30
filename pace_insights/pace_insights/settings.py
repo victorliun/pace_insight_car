@@ -26,7 +26,7 @@ SECRET_KEY = '#je9+^2j*f&!ku@cmbhxzfr)vm_55pxk$*!qra77n3gtii6%s)'
 DEBUG = True
 
 TEMPLATE_DEBUG = True
-
+TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
 ALLOWED_HOSTS = ['.carfinancecompared.com',]
 
 
@@ -40,7 +40,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    #'djcelery',
     'depreciation',
 )
 
@@ -91,8 +90,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR,'static')
- 
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR,'static'),
+)
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
 # Redis
  
 REDIS_PORT = 6379

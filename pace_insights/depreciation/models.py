@@ -141,6 +141,7 @@ class Depreciation(models.Model):
     class Meta:
         verbose_name_plural = 'Depreciations'
         get_latest_by = "create_time"
+        ordering = ['-create_time',]
 
 
 class FinancialOption(models.Model):

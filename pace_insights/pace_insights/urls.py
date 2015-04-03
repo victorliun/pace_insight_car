@@ -4,10 +4,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from depreciation import urls as depreciation_urls
-from depreciation.views import home
+from depreciation.views import home, about
 
 urlpatterns = patterns('',
     url(r'^$', home),
+    url(r'^about/$', about),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^depreciation/', include(depreciation_urls)),
 )

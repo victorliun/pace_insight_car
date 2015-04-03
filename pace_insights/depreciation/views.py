@@ -4,15 +4,23 @@ Views/Controllers
 import datetime
 from rest_framework import mixins, viewsets
  
-from .models import Job
-from .serializers import JobSerializer
+from .models import Job, CarMake, CarModel
+from .serializers import JobSerializer, CarModelSerializer
 
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import render_to_response
 
+
 def home(request):
-    return render_to_response('index.html')
+    context = {}
+    context['carmakes'] = CarMake.objects.all()
+    return render_to_response('main.html', context)
+
+
+def about(request):
+    return render_to_response('about.html')
+
 
 class JobViewSet(mixins.CreateModelMixin,
                  mixins.ListModelMixin,
@@ -25,6 +33,20 @@ class JobViewSet(mixins.CreateModelMixin,
     """
     queryset = Job.objects.all()
     serializer_class = JobSerializer
+
+
+class CarModelViewSet(mixins.CreateModelMixin,
+                 mixins.ListModelMixin,
+                 mixins.UpdateModelMixin,
+                 mixins.DestroyModelMixin,
+                 mixins.RetrieveModelMixin,
+                 viewsets.GenericViewSet):
+    """
+    API endpoint that allows car model to be viewed or created.
+    """
+    queryset = CarModel.objects.all()
+    serializer_class = CarModelSerializer
+    filter_fields = ('car_make', )
 
 
 def test_json(request):

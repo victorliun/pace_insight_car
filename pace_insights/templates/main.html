@@ -2,23 +2,48 @@
 {% load staticfiles %}
 {%block page_body%}
 <div class=''>
-<form class="form-horizontal" name="compareForm">
+<form class="form-horizontal" name="compareForm" action='' ng-controller='CompareFormController'>
   <div class="form-group">
     <label for="carMake" class="col-sm-2 control-label">Car Make</label>
     <div class="col-sm-10">
-      <select class="form-control" name="car_make">
-      	{%for carmake in carmakes%}
-		  <option value="{{carmake.id}}">{{carmake.name}}</option>
-      	{%endfor%}
-	  </select>
+      <select class="form-control" ng-change='updateCarModel(defaultCarMake)' name="car_make" ng-model="defaultCarMake" ng-options="carmake.name for carmake in carmakes track by carmake.id"></select>
     </div>
   </div>
   <div class="form-group">
-    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+    <label for="carModel" class="col-sm-2 control-label">Car Model</label>
     <div class="col-sm-10">
-      <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+      <select class="form-control" ng-change='updateCarVersion(defaultCarModel)'  name="car_model" ng-model="defaultCarModel" ng-options="carModel.name for carModel in carModels track by carModel.id"></select>
     </div>
   </div>
+
+  <div class="form-group">
+    <label for="carVersion" class="col-sm-2 control-label">Car Version</label>
+    <div class="col-sm-10">
+      <select class="form-control" name="car_version" ng-change='updateDepreciation(defaultCarVersion)' ng-model="defaultCarVersion" ng-options="carVersion.name for carVersion in carVersions track by carVersion.id"></select>
+    </div>
+  </div>
+  <table class="table">
+    <caption>Car depreciation - <span ng-bind="depreciation.car_full_name"></span></caption>
+    <thead>
+      <tr>
+        <th>Year 0</th>
+        <th>Year 1</th>
+        <th>Year 2</th>
+        <th>Year 3</th>
+        <th>Year 4</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td ng-bind="depreciation.year_0_mock"></td>
+        <td ng-bind="depreciation.year_1_mock"></td>
+        <td ng-bind="depreciation.year_2_mock"></td>
+        <td ng-bind="depreciation.year_3_mock"></td>
+        <td ng-bind="depreciation.year_4_mock"></td>
+      </tr>
+    </tbody>
+  </table>
+
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
       <button type="submit" class="btn btn-default">Go</button>

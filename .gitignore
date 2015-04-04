@@ -1,6 +1,7 @@
 # python compiled stuff
 *.pyc
 *.pyo
+.DS_Store
 
 # text editor backups
 *~

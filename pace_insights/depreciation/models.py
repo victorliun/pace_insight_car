@@ -35,6 +35,7 @@ class CarMake(models.Model):
 
     class Meta:
         verbose_name_plural = 'Car Makes'
+        ordering = ('name',)
 
 
 class CarModel(models.Model):
@@ -62,6 +63,7 @@ class CarModel(models.Model):
     class Meta:
         verbose_name_plural = 'Car Models'
         unique_together = ("name", "car_make")
+        ordering = ('name',)
 
 
 class CarVersion(models.Model):
@@ -98,6 +100,7 @@ class CarVersion(models.Model):
     class Meta:
         verbose_name_plural = 'Car Versions'
         unique_together = ("name", "car_model")
+        ordering = ('name',)
 
 
 class Depreciation(models.Model):

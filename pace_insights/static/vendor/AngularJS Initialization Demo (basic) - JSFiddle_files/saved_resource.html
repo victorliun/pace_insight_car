@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!-- saved from url=(0034)http://fiddle.jshell.net/_display/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>AngularJS Initialization Demo (basic) - jsFiddle demo</title>
+  
+  <script type="text/javascript" src="dummy.js"></script>
+  
+  
+  
+  
+  <link rel="stylesheet" type="text/css" href="result-light.css">
+  
+    
+      <script type="text/javascript" src="angular.min.js"></script><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak{display:none;}ng\:form{display:block;}</style>
+    
+  
+  <style type="text/css">
+    div.left,
+div.right {
+    position: relative;
+    float: left;
+}
+.wrapper {
+    width: 100%;
+}
+.left {
+    width: 40%;
+}
+.right {
+    width: 40%;
+}
+.log {
+    margin-top: 10px;
+}
+ul {
+    list-style-type: none;
+}
+  </style>
+  
+
+
+<script type="text/javascript">//<![CDATA[ 
+
+var myModule = angular.module('myModule', []);
+
+myModule.service('myService', function($http) {
+    $http.defaults.headers.post['Content-Type'] = "application/x-www-form-urlencoded; charset=UTF-8";
+    this.getOptions = function() {
+        return $http({
+            "method": "post",
+            "url": '/echo/json/', 
+            "data": "delay=3&json=" + encodeURI(JSON.stringify({
+                options: [
+                    {name:'entry1', value:0},
+                    {name:'entry2', value:1},
+                    {name:'entry3', value:2}]
+            }))
+        });
+    };
+});
+
+myModule.controller('simpleController', function($scope, myService) {
+    $scope.selectedOption = null;
+    $scope.options = [];
+    $scope.logentries = [];
+    myService.getOptions().then(function(result) {
+        $scope.options = result.data.options;
+        $scope.selectedOption = -1;
+    });
+    $scope.$watch('selectedOption', function(newValue, oldValue) {
+        // handle selection change ...
+        console.log("selection: " + $scope.selectedOption);
+        $scope.logentries.push(($scope.logentries.length + 1) + " - selection: " + $scope.selectedOption);
+    });
+});
+
+//]]>  
+
+</script>
+
+
+</head>
+<body>
+  <div ng-app="myModule" class="wrapper ng-scope">
+    <h2>AngularJS Initialization Demo</h2>
+    <p>For details see <a href="http://wp.me/p1E7sK-hn" target="_blank">article</a>
+    </p><div ng-controller="simpleController" class="left ng-scope">
+        <h3>basic example</h3>
+        <p ng-show="options.length == 0" style="display: none;">loading options...</p>
+        <select ng-show="options.length !== 0" ng-model="selectedOption" ng-options="option.value as option.name for option in options" class="ng-pristine ng-valid"><option value="?" selected="selected"></option><option value="0">entry1</option><option value="1">entry2</option><option value="2">entry3</option></select>
+        
+        <div class="log">
+            log:
+            <ul>
+                <!-- ngRepeat: entry in logentries --><li ng-repeat="entry in logentries" class="ng-scope ng-binding">1 - selection: null</li><li ng-repeat="entry in logentries" class="ng-scope ng-binding">2 - selection: -1</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+  
+
+
+
+
+
+<div class="vimiumReset vimiumHUD" style="right: 150px; opacity: 0; display: none;"></div></body></html>

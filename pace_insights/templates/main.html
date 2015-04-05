@@ -8,20 +8,20 @@
     <div class="form-group">
       <label for="carMake" class="col-sm-2 control-label">Car Make</label>
       <div class="col-sm-10">
-        <select class="form-control" ng-change='updateCarModel(defaultCarMake)' ng-model="compCtrl.carMake" ng-options="carmake.name for carmake in carmakes track by carmake.id"></select>
+        <select class="form-control" ng-change='updateCarModel(carMake)' ng-model="carMake" ng-options="carmake.name for carmake in carmakes track by carmake.id"></select>
       </div>
     </div>
     <div class="form-group">
       <label for="carModel" class="col-sm-2 control-label">Car Model</label>
       <div class="col-sm-10">
-        <select class="form-control" ng-change='updateCarVersion(defaultCarModel)' ng-model="compCtrl.carModel" ng-options="carModel.name for carModel in carModels track by carModel.id"></select>
+        <select class="form-control" ng-change='updateCarVersion(carModel)' ng-model="carModel" ng-options="carModel.name for carModel in carModels track by carModel.id"></select>
       </div>
     </div>
 
     <div class="form-group">
       <label for="carVersion" class="col-sm-2 control-label">Car Version</label>
       <div class="col-sm-10">
-        <select class="form-control" ng-change='updateDepreciation(defaultCarVersion)' ng-model="compCtrl.carVersion" ng-options="carVersion.name for carVersion in carVersions track by carVersion.id"></select>
+        <select class="form-control" ng-change='updateDepreciation(carVersion)' ng-model="carVersion" ng-options="carVersion.name for carVersion in carVersions track by carVersion.id"></select>
       </div>
     </div>
     <table class="table">
@@ -36,12 +36,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr><!-- 
           <td ng-bind="depreciation.year_0_mock"></td>
           <td ng-bind="depreciation.year_1_mock"></td>
           <td ng-bind="depreciation.year_2_mock"></td>
           <td ng-bind="depreciation.year_3_mock"></td>
-          <td ng-bind="depreciation.year_4_mock"></td>
+          <td ng-bind="depreciation.year_4_mock"></td> -->
+
+          <td ng-bind="depreciation.year_0"></td>
+          <td ng-bind="depreciation.year_1"></td>
+          <td ng-bind="depreciation.year_2"></td>
+          <td ng-bind="depreciation.year_3"></td>
+          <td ng-bind="depreciation.year_4"></td>
         </tr>
       </tbody>
     </table>
@@ -171,13 +177,14 @@
             <input type="number" class="form-control" ng-model='compCtrl.lease.extras'  min="1"  ng-required='compCtrl.foLease=="True"'>
           </div>
         </div>
-        <div class="form-group">
 
+        <div class="form-group">
           <label  for="monthly" class="col-sm-2 control-label">Monthly(£)</label>
           <div class="col-sm-2">
             <input type="number" class="form-control" ng-model='compCtrl.lease.monthly'  min="1"  ng-required='compCtrl.foLease=="True"'>
           </div>
-          <label  for="actual_annual" class="col-sm-2 control-label">Actual annual mileages</label>
+
+          <label  for="actual_annual" class="col-sm-2 control-label">Annual mileages</label>
           <div class="col-sm-2">
             <input type="number" class="form-control" ng-model='compCtrl.lease.actual_annual' min="1">
           </div>
@@ -185,6 +192,13 @@
           <label  for="include_mileages" class="col-sm-2 control-label">Include milages</label>
           <div class="col-sm-2">
             <input type="number" class="form-control" ng-model='compCtrl.lease.include_mileages' min="1">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label  for="price_per_mile" class="col-sm-2 control-label">Price (£/mile)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" ng-model='compCtrl.lease.price_per_mile' min="0">
           </div>
         </div>
       </div>
@@ -228,12 +242,12 @@
       <h4 class="text-danger">Please fill the red inputs properly before comparing.</h4>
     </div>
   </div>
+  <div class='well payGraph' ng-show="compCtrl.showGraph=='True'">
+  </div>
 </form>
-<div class='well payGraph'>
-</div>
 </div>
 {%endblock%}
 
 {%block extra_js%}
-<script src="{% static 'js/graph.js' %}" type="text/javascript"></script>}
+<script src="{% static 'js/graph.js' %}" type="text/javascript"></script>
 {%endblock%}

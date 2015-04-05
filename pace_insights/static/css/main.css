@@ -97,7 +97,7 @@ body {
 	font-size: 8pt;
 }
 
-.ng-invalid.ng-dirty, .ng-invalid{
+.ng-invalid.ng-dirty, .ng-invalid {
   border-color: red;
 }
 

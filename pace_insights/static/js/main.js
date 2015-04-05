@@ -1,7 +1,8 @@
 (function(){
     var app = angular.module('finnacialOptions', [])
 
-    .controller('CompareFormController', ['$scope', '$http', function($scope, $http){
+    .controller('CompareFormController', ['$scope', '$http', 
+        function($scope, $http){
         $scope.carmakes = [];
         $scope.carModels = [];
         $scope.carVersions = [];
@@ -9,9 +10,9 @@
         $http.get('/depreciation/carmakes/', { params: params }
             ).success(
             function(response) { 
-                console.log(response[0]);
+                // console.log(response[0]);
                 $scope.carmakes = response;
-                $scope.compCtrl.carMake = response[0];
+                $scope.carMake = response[0];
                 $scope.updateCarModel(response[0]);
             }).error(
                 function(failure) { console.log("failed :(", failure); }
@@ -21,7 +22,7 @@
             $http.get('/depreciation/carmodels/', { params: _new_param}).
             success(function (data) {
                 $scope.carModels = data;
-                $scope.compCtrl.carModel = data[0];
+                $scope.carModel = data[0];
                 $scope.updateCarVersion(data[0]);
             }).
             error(
@@ -34,7 +35,7 @@
             $http.get('/depreciation/carversions/', { params: _new_param}).
             success(function (data) {
                 $scope.carVersions = data;
-                $scope.compCtrl.carVersion = data[0];
+                $scope.carVersion = data[0];
                 $scope.updateDepreciation(data[0]);
             }).
             error(
@@ -46,8 +47,9 @@
             var _new_param = {'format': 'json', 'car_version': car_version['id']};
             $http.get('/depreciation/depreciations/', { params: _new_param}).
             success(function (data) {
-                console.log(data);
+                // console.log(data);
                 $scope.depreciation = data[0];
+                $scope.compCtrl.depreciationId = $scope.depreciation['id'];
             }).
             error(
                 function(failure) { console.log("failed :(", failure); }
@@ -55,9 +57,21 @@
         };
 
         $scope.submit = function(){
-            console.log($scope);
+            // console.log($scope.compCtrl);
+            var params = $scope.compCtrl;
+            $http.get('/depreciation/api/get-graph-data', {params: params})
+            .success(function(data){
+                // console.log(data);
+                angular.element(document.querySelectorAll("div.payGraph")).html('');
+                create_graph(data);
+                $scope.compCtrl.showGraph = 'True';
+            }).
+            error(
+                function(failure) { console.log("failed :(", failure); }
+            );
         }
     }]);
+
 
 
 })();

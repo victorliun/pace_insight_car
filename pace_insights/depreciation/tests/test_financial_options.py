@@ -16,15 +16,16 @@ class FinancialOptionsTest(TestCase):
     fixtures = ["financial_options"]
 
     def setUp(self):
-        self.car_version = CarVersion.objects.all()[0]
-
+        car_version = CarVersion.objects.all()[0]
+        self.depreciation_id = car_version.depreciations.order_by(
+            '-create_time')[0].id
     def test_hp(self):
         hp = HP(
             loan_at=0.07,
             term=4,
             stick_price=32485,
-            total_up_front=2580,
-            car_version=self.car_version
+            deposit_amount=2580,
+            depreciation_id=self.depreciation_id
         )
         self.assertEqual(hp.finance_value, 29905)
         self.assertEqual(hp.actual_monthly, 716.11)
@@ -40,8 +41,8 @@ class FinancialOptionsTest(TestCase):
             loan_at=0.07,
             term=4,
             stick_price=32485,
-            total_up_front=2580,
-            car_version=self.car_version
+            deposit_amount=2580,
+            depreciation_id=self.depreciation_id
         )
         self.assertEqual(pcp.finance_value, 29905)
         self.assertEqual(pcp.ballon_est, 13969.8)
@@ -59,19 +60,20 @@ class FinancialOptionsTest(TestCase):
             term=2,
             monthly=209,
             extras=1500,
+            actual_annual=8000,
+            include=8000,
+            price_per_mile=0.2,
             stick_price=32485,
-            total_up_front=2580,
-            car_version=self.car_version
+            deposit_amount=2580,
+            depreciation_id=self.depreciation_id
         )
         self.assertEqual(lease.finance_value, 29905)
         self.assertEqual(lease.actual_monthly, 313.30)
-        self.assertEqual(lease.excess_mile_charges(
-            actual_annual=8000,
-            include=8000), 0)
+        self.assertEqual(lease.excess_mile_charges, 0)
         self.assertEqual(lease.effective_cost, 9785.90)
         self.assertEqual(lease.effective_monthly, 407.75)
         self.assertEqual(lease.total_payable(), 9785.90)
-        self.assertEqual(lease.value_score(200), 9985.90)
+        self.assertEqual(lease.value_score(), 9785.90)
 
 
     def test_loan(self):
@@ -79,9 +81,9 @@ class FinancialOptionsTest(TestCase):
             loan_at=0.039,
             term=4,
             stick_price=32485,
-            total_up_front=2580,
+            deposit_amount=2580,
             loan_at_end=0,
-            car_version=self.car_version
+            depreciation_id=self.depreciation_id
         )
         self.assertEqual(loan.finance_value, 29905)
         self.assertEqual(loan.actual_monthly, 673.89)

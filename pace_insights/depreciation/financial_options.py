@@ -7,6 +7,8 @@ import numpy
 import logging
 
 from depreciation.utils import Price, DepreciationProfile, int_to_str
+from depreciation.models import Depreciation
+
 
 logger = logging.getLogger(__name__)
 
@@ -15,17 +17,18 @@ class FinancailOption(object):
     """This the subclass of"""
 
     def __init__(self, loan_at=0.1, stick_price=0,
-        total_up_front=0, term=4, car_version=None, loan_at_end=0):
+            deposit_amount=0, px_amount=0, term=4,
+            depreciation_id=None, loan_at_end=0):
         self.loan_at = loan_at
         self.total_months = term * 12
-        self.total_up_front = total_up_front
-        self.finance_value = stick_price - total_up_front
+        self.total_up_front = deposit_amount + px_amount
+        self.px_amount = px_amount
+        self.finance_value = stick_price - self.total_up_front
         self.loan_at_end = loan_at_end
 
-        if car_version is None:
+        if depreciation_id is None:
             raise Exception('Invalid car version')
-        depreciation = car_version.depreciations.order_by(
-            '-create_time')[0]
+        depreciation = Depreciation.objects.get(pk=depreciation_id)
         depr_profile = DepreciationProfile(
             depreciation.get_raw_data(),
             int_to_str(stick_price)
@@ -127,38 +130,41 @@ VAT = 1.2
 class Lease(FinancailOption):
     name = 'Lease'
 
-    def __init__(self, initial_payment, monthly, extras, *args, **kwargs):
+    def __init__(self, initial_payment, monthly, extras,
+            actual_annual=0, include=0, price_per_mile=0.20, *args, **kwargs):
         super(Lease, self).__init__(*args, **kwargs)
         self.initial_payment = round(initial_payment * VAT, 2)
         self.monthly = round(monthly * VAT, 2)
         self.monthly_extras = round(extras * 1.0 / self.total_months, 2)
+        self.actual_annual = actual_annual
+        self.include = include
+        self.price_per_mile = price_per_mile
 
     @property
     def actual_monthly(self):
         return self.monthly + self.monthly_extras
 
-    def excess_mile_charges(self, actual_annual=8000,
-            include=8000, price_per_mile=0.20):
+    @property
+    def excess_mile_charges(self):
         # price per mile include VAT
-        excess = actual_annual - include
-        return excess * price_per_mile
+        excess = self.actual_annual - self.include
+        return excess * self.price_per_mile * self.total_months / 12
 
     @property
     def effective_cost(self):
         total_instalment = round(self.actual_monthly * (
             self.total_months - 1), 2)
-        return self.initial_payment + total_instalment
-        
+        cost = self.initial_payment + total_instalment 
+        cost += self.excess_mile_charges
+        return cost
 
     @property
     def effective_monthly(self):
-        return round(self.effective_cost / self.total_months, 2)
+        return round(self.value_score() / self.total_months, 2)
 
 
     def total_payable(self):
         return self.effective_cost
 
-    def value_score(self, px=0):
-        return self.effective_cost + px
-
- 
+    def value_score(self):
+        return self.effective_cost - self.px_amount

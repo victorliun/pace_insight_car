@@ -34,5 +34,6 @@ class DepreciationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Depreciation
-        fields = ('id', 'car_version', 'year_0_mock', 'year_1_mock',
-            'year_2_mock', 'year_3_mock', 'year_4_mock', 'car_full_name')
+        fields = ('id', 'car_version', 'year_0', 'year_1',
+            'year_2', 'year_3', 'year_4', 'car_full_name')
+            # 'year_2_mock', 'year_3_mock', 'year_4_mock', 'car_full_name')

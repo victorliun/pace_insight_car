@@ -11,7 +11,7 @@
             function(response) { 
                 console.log(response[0]);
                 $scope.carmakes = response;
-                $scope.defaultCarMake = response[0];
+                $scope.compCtrl.carMake = response[0];
                 $scope.updateCarModel(response[0]);
             }).error(
                 function(failure) { console.log("failed :(", failure); }
@@ -21,7 +21,7 @@
             $http.get('/depreciation/carmodels/', { params: _new_param}).
             success(function (data) {
                 $scope.carModels = data;
-                $scope.defaultCarModel = data[0];
+                $scope.compCtrl.carModel = data[0];
                 $scope.updateCarVersion(data[0]);
             }).
             error(
@@ -34,7 +34,7 @@
             $http.get('/depreciation/carversions/', { params: _new_param}).
             success(function (data) {
                 $scope.carVersions = data;
-                $scope.defaultCarVersion = data[0];
+                $scope.compCtrl.carVersion = data[0];
                 $scope.updateDepreciation(data[0]);
             }).
             error(
@@ -53,6 +53,10 @@
                 function(failure) { console.log("failed :(", failure); }
             );
         };
+
+        $scope.submit = function(){
+            console.log($scope);
+        }
     }]);
 
 

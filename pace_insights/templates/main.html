@@ -2,54 +2,235 @@
 {% load staticfiles %}
 {%block page_body%}
 <div class=''>
-<form class="form-horizontal" name="compareForm" action='' ng-controller='CompareFormController'>
-  <div class="form-group">
-    <label for="carMake" class="col-sm-2 control-label">Car Make</label>
-    <div class="col-sm-10">
-      <select class="form-control" ng-change='updateCarModel(defaultCarMake)' name="car_make" ng-model="defaultCarMake" ng-options="carmake.name for carmake in carmakes track by carmake.id"></select>
+<form class="form-horizontal" name="compareForm" novalidate ng-controller='CompareFormController as compCtrl' ng-submit="compareForm.$valid && submit()">
+  <h3>Choose your favorate car</h3>
+  <div class='well'>
+    <div class="form-group">
+      <label for="carMake" class="col-sm-2 control-label">Car Make</label>
+      <div class="col-sm-10">
+        <select class="form-control" ng-change='updateCarModel(defaultCarMake)' ng-model="compCtrl.carMake" ng-options="carmake.name for carmake in carmakes track by carmake.id"></select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="carModel" class="col-sm-2 control-label">Car Model</label>
+      <div class="col-sm-10">
+        <select class="form-control" ng-change='updateCarVersion(defaultCarModel)' ng-model="compCtrl.carModel" ng-options="carModel.name for carModel in carModels track by carModel.id"></select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="carVersion" class="col-sm-2 control-label">Car Version</label>
+      <div class="col-sm-10">
+        <select class="form-control" ng-change='updateDepreciation(defaultCarVersion)' ng-model="compCtrl.carVersion" ng-options="carVersion.name for carVersion in carVersions track by carVersion.id"></select>
+      </div>
+    </div>
+    <table class="table">
+      <caption>Car depreciation - <span ng-bind="depreciation.car_full_name"></span></caption>
+      <thead>
+        <tr>
+          <th>Year 0</th>
+          <th>Year 1</th>
+          <th>Year 2</th>
+          <th>Year 3</th>
+          <th>Year 4</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td ng-bind="depreciation.year_0_mock"></td>
+          <td ng-bind="depreciation.year_1_mock"></td>
+          <td ng-bind="depreciation.year_2_mock"></td>
+          <td ng-bind="depreciation.year_3_mock"></td>
+          <td ng-bind="depreciation.year_4_mock"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>Input the price and your budget</h3>
+  <div class="well">
+    <div class="form-group">
+      <label  for="carModel" class="col-sm-3 control-label">Total Price(£)</label>
+      <div class="col-sm-3">
+        <input type="number" class="form-control" id="total_price" ng-model='compCtrl.totalPrice' required min="1">
+      </div>
+
+      <label  for="carModel" class="col-sm-3 control-label">Discount(%)</label>
+      <div class="col-sm-3">
+        <input type="number" class="form-control" id="discount" ng-model='compCtrl.discount'  min="0" max="100">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label  for="carModel" class="col-sm-3 control-label">Deposit Amount(£)</label>
+      <div class="col-sm-3">
+        <input type="number" class="form-control" id="deposit_amount" ng-model='compCtrl.depositAmount' min="1">
+      </div>
+
+      <label  for="carModel" class="col-sm-4 control-label">Part-Exchange Amount(£)</label>
+      <div class="col-sm-2">
+        <input type="number" class="form-control" id="px_amount" ng-model='compCtrl.pxAmount'  min="1">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label  for="carModel" class="col-sm-3 control-label">Monthly Budget(£)</label>
+      <div class="col-sm-9">
+        <input type="number" class="form-control" id="monthly_budget" ng-model='compCtrl.monthlyBudget' required min="1">
+      </div>
     </div>
   </div>
-  <div class="form-group">
-    <label for="carModel" class="col-sm-2 control-label">Car Model</label>
-    <div class="col-sm-10">
-      <select class="form-control" ng-change='updateCarVersion(defaultCarModel)'  name="car_model" ng-model="defaultCarModel" ng-options="carModel.name for carModel in carModels track by carModel.id"></select>
+  
+  <h3>Select financial option(s)</h3>
+  <div class="well">
+    <label class="checkbox-inline">
+      <input type="checkbox" id="cb_hp" ng-true-value="'True'" ng-false-value="'False'" ng-model='compCtrl.foHP'> HP
+    </label>
+    <label class="checkbox-inline">
+      <input type="checkbox" id="cb_pcp" ng-true-value="'True'" ng-false-value="'False'" ng-model='compCtrl.foPCP'> PCP
+    </label>
+    <label class="checkbox-inline">
+      <input type="checkbox" id="cb_lease" ng-true-value="'True'" ng-false-value="'False'" ng-model='compCtrl.foLease'> LEASE
+    </label>
+    <label class="checkbox-inline">
+      <input type="checkbox" id="cb_loan" ng-true-value="'True'" ng-false-value="'False'" ng-model='compCtrl.foLoan'> LOAN
+    </label>
+    <hr/>
+    <div ng-show="compCtrl.foHP == 'True'" >
+      <h4>HP</h4>
+      <div class='well'>
+        <div class="form-group">
+          <label  for="term" class="col-sm-2 control-label">Term (years)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" ng-model='compCtrl.hp.term' ng-required='compCtrl.foHP=="True"' min="1">
+          </div>
+
+          <label  for="loan_at" class="col-sm-2 control-label">Loan at rate(%)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" ng-model='compCtrl.hp.loan_at' ng-required='compCtrl.foHP=="True"'  min="0" max="100">
+          </div>
+
+          <label  for="loanAtEnd" class="col-sm-2 control-label">Loan at end(£)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" ng-model='compCtrl.hp.loan_at_end'  min="0" placeholder='0'>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label  for="tax" class="col-sm-2 control-label">Tax (yearly £)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" ng-model='compCtrl.hp.tax' ng-required='compCtrl.foHP=="True"' min="1">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div ng-show="compCtrl.foPCP == 'True'" >
+      <h4>PCP</h4>
+      <div class='well'>
+        <div class="form-group">
+          <label  for="term" class="col-sm-2 control-label">Term (years)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" ng-model='compCtrl.pcp.term' ng-required='compCtrl.foPCP=="True"' min="1">
+          </div>
+
+          <label  for="loan_at" class="col-sm-2 control-label">Loan at rate(%)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" ng-model='compCtrl.pcp.loan_at' ng-required='compCtrl.foPCP=="True"'  min="0" max="100">
+          </div>
+
+          <label  for="loanAtEnd" class="col-sm-2 control-label">Ballon/Value(£)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" ng-model='compCtrl.pcp.ballon_value'  min="0" ng-required='compCtrl.foPCP=="True"' >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label  for="tax" class="col-sm-2 control-label">Tax (yearly £)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" ng-model='compCtrl.pcp.tax' ng-required='compCtrl.foPCP=="True"' min="1">
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div ng-show="compCtrl.foLease == 'True'" >
+      <h4>LEASE</h4>
+      <div class='well'>
+        <div class="form-group">
+          <label  for="term" class="col-sm-2 control-label">Term (years)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" ng-model='compCtrl.lease.term' ng-required='compCtrl.foLease=="True"' min="1">
+          </div>
+
+          <label  for="initial_payment" class="col-sm-2 control-label">Initial payment(£)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" ng-model='compCtrl.lease.initial_payment' ng-required='compCtrl.foLease=="True"'  min="1">
+          </div>
+
+          <label  for="extras" class="col-sm-2 control-label">Extras(£)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" ng-model='compCtrl.lease.extras'  min="1"  ng-required='compCtrl.foLease=="True"'>
+          </div>
+        </div>
+        <div class="form-group">
+
+          <label  for="monthly" class="col-sm-2 control-label">Monthly(£)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" ng-model='compCtrl.lease.monthly'  min="1"  ng-required='compCtrl.foLease=="True"'>
+          </div>
+          <label  for="actual_annual" class="col-sm-2 control-label">Actual annual mileages</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" ng-model='compCtrl.lease.actual_annual' min="1">
+          </div>
+
+          <label  for="include_mileages" class="col-sm-2 control-label">Include milages</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" ng-model='compCtrl.lease.include_mileages' min="1">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div ng-show="compCtrl.foLoan == 'True'" >
+      <h4>LOAN</h4>
+      <div class='well'>
+        <div class="form-group">
+          <label  for="term" class="col-sm-2 control-label">Term (years)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" id="total_price" ng-model='compCtrl.loan.term' ng-required='compCtrl.foLoan=="True"' min="1">
+          </div>
+
+          <label  for="loan_at" class="col-sm-2 control-label">Loan at rate(%)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" id="loan_at" ng-model='compCtrl.loan.loan_at' ng-required='compCtrl.foLoan=="True"'  min="0" max="100">
+          </div>
+
+          <label  for="loanAtEnd" class="col-sm-2 control-label">Loan at end(£)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" id="loan_at_end" ng-model='compCtrl.loan.loan_at_end'  min="0" placeholder='0'>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label  for="tax" class="col-sm-2 control-label">Tax (yearly £)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" ng-model='compCtrl.loan.tax' ng-required='compCtrl.foLoan=="True"' min="1">
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 
   <div class="form-group">
-    <label for="carVersion" class="col-sm-2 control-label">Car Version</label>
-    <div class="col-sm-10">
-      <select class="form-control" name="car_version" ng-change='updateDepreciation(defaultCarVersion)' ng-model="defaultCarVersion" ng-options="carVersion.name for carVersion in carVersions track by carVersion.id"></select>
+    <div class="col-sm-2">
+      <button type="submit" class="btn btn-default">Compare</button>
     </div>
-  </div>
-  <table class="table">
-    <caption>Car depreciation - <span ng-bind="depreciation.car_full_name"></span></caption>
-    <thead>
-      <tr>
-        <th>Year 0</th>
-        <th>Year 1</th>
-        <th>Year 2</th>
-        <th>Year 3</th>
-        <th>Year 4</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td ng-bind="depreciation.year_0_mock"></td>
-        <td ng-bind="depreciation.year_1_mock"></td>
-        <td ng-bind="depreciation.year_2_mock"></td>
-        <td ng-bind="depreciation.year_3_mock"></td>
-        <td ng-bind="depreciation.year_4_mock"></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default">Go</button>
+    <div class='col-sm-10 red' ng-hide='compareForm.$valid'>
+      <h4 class="text-danger">Please fill the red inputs properly before comparing.</h4>
     </div>
   </div>
 </form>
+<div class='well payGraph'>
+</div>
 </div>
 {%endblock%}
 

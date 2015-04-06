@@ -1,4 +1,5 @@
 function create_graph(ddata){
+  console.log(ddata);
   var margin = {top: 20, right: 20, bottom: 30, left: 40},
       width = 400 - margin.left - margin.right,
       height = 200 - margin.top - margin.bottom;
@@ -6,8 +7,9 @@ function create_graph(ddata){
   var x0 = d3.scale.ordinal()
       .rangeRoundBands([0, width], .1);
 
-  var x1 = d3.scale.ordinal();
-
+  // var x1 = d3.scale.ordinal();
+  var x1 = d3.scale.ordinal()
+    .rangeBands([0, width], 0);
   var y = d3.scale.linear()
       .range([height, 0]);
 
@@ -22,7 +24,7 @@ function create_graph(ddata){
       .scale(y)
       .orient("left")
       .tickFormat(function(d) {
-      	var format = d3.format(",.1s");
+      	var format = d3.format(",.2s");
       	return '£' + format(d);
   	});
 
@@ -40,8 +42,11 @@ function create_graph(ddata){
   });
 
   x0.domain(data.map(function(d) { return d.financial_option; }));
+//   x1.domain(data.map(function(d) { return d.financial_option; }));
   x1.domain(financial_options).rangeRoundBands([0, x0.rangeBand()]);
-  y.domain([0, d3.max(data, function(d) { return d3.max(d.prices, function(d) { return d.value; }); })]);
+  y.domain([0, d3.max(data, function(d) { 
+    return d3.max(d.prices, function(d) { 
+      return d.value; }); })]);
 
   svg.append("g")
       .attr("class", "x axis")
@@ -76,7 +81,7 @@ function create_graph(ddata){
       .data(financial_options.slice().reverse())
       .enter().append("g")
       .attr("class", "legend")
-      .attr("transform", function(d, i) { return "translate(0," + i * 12 + ")"; });
+      .attr("transform", function(d, i) { return "translate(10," + i * 12 + ")"; });
 
   legend.append("rect")
       .attr("x", width - 18)
@@ -90,17 +95,18 @@ function create_graph(ddata){
       .attr("dy", ".01em")
       .style("text-anchor", "end")
       .text(function(d) { return d; });
-
-  var dataSum = d3.sum(data, function(d) { return d.frequency; }); 
  
   var line = d3.svg.line()
-      .x(function(d, i) { 
-      return x2(d.letter) + i; })
-      .y(function(d, i) { return y(data.budget); }); 
-  
+      .x(function(d, i){
+        if(i==0)
+         return 0;
+        else{
+          return width;
+        }})
+      .y(function(d, i) { return y(ddata.budget); });
+
   svg.append("path")
       .datum(data)
       .attr("class", "line")
       .attr("d", line);
-
 };

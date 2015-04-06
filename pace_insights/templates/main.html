@@ -36,18 +36,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr><!-- 
+        <tr>
           <td ng-bind="depreciation.year_0_mock"></td>
           <td ng-bind="depreciation.year_1_mock"></td>
           <td ng-bind="depreciation.year_2_mock"></td>
           <td ng-bind="depreciation.year_3_mock"></td>
-          <td ng-bind="depreciation.year_4_mock"></td> -->
-
+          <td ng-bind="depreciation.year_4_mock"></td>
+<!-- 
           <td ng-bind="depreciation.year_0"></td>
           <td ng-bind="depreciation.year_1"></td>
           <td ng-bind="depreciation.year_2"></td>
           <td ng-bind="depreciation.year_3"></td>
-          <td ng-bind="depreciation.year_4"></td>
+          <td ng-bind="depreciation.year_4"></td> -->
         </tr>
       </tbody>
     </table>
@@ -86,7 +86,7 @@
     </div>
   </div>
   
-  <h3>Select financial option(s)</h3>
+  <h3>Select financial options (at least two)</h3>
   <div class="well">
     <label class="checkbox-inline">
       <input type="checkbox" id="cb_hp" ng-true-value="'True'" ng-false-value="'False'" ng-model='compCtrl.foHP'> HP
@@ -143,9 +143,9 @@
             <input type="number" class="form-control" ng-model='compCtrl.pcp.loan_at' ng-required='compCtrl.foPCP=="True"'  min="0" max="100">
           </div>
 
-          <label  for="loanAtEnd" class="col-sm-2 control-label">Ballon/Value(£)</label>
+          <label  for="loanAtEnd" class="col-sm-2 control-label">Ballon/Value(%)</label>
           <div class="col-sm-2">
-            <input type="number" class="form-control" ng-model='compCtrl.pcp.ballon_value'  min="0" ng-required='compCtrl.foPCP=="True"' >
+            <input type="number" class="form-control" ng-model='compCtrl.pcp.ballon_value'  min="0" max='100' ng-required='compCtrl.foPCP=="True"' >
           </div>
         </div>
 

@@ -66,9 +66,9 @@
         <input type="number" class="form-control" id="extra_price" ng-model='compCtrl.extraPrice' min="1">
       </div>
 
-      <label  for="carModel" class="col-sm-2 control-label">Discount(%)</label>
+      <label  for="carModel" class="col-sm-2 control-label">Discount(£)</label>
       <div class="col-sm-2">
-        <input type="number" class="form-control" id="discount" ng-model='compCtrl.discount'  min="0" max="100">
+        <input type="number" class="form-control" id="discount" ng-model='compCtrl.discount'  min="1">
       </div>
     </div>
 
@@ -78,23 +78,24 @@
         <input type="number" class="form-control" id="deposit_amount" ng-model='compCtrl.depositAmount' min="1">
       </div>
 
-      <label  for="carModel" class="col-sm-3 control-label">Part-Exchange Amount(£)</label>
+      <label  for="carModel" class="col-sm-2 control-label">Part-Exchange Amount(£)</label>
       <div class="col-sm-2">
         <input type="number" class="form-control" id="px_amount" ng-model='compCtrl.pxAmount'  min="1">
       </div>
     </div>
 
     <div class="form-group">
-      <label  for="carModel" class="col-sm-3 control-label">Target Monthly Budget(£)</label>
+      <label  for="carModel" class="col-sm-2 control-label">Target Monthly Budget(£)</label>
       <div class="col-sm-2">
         <input type="number" class="form-control" id="monthly_budget" ng-model='compCtrl.monthlyBudget' required min="1" placeholder='*'>
       </div>
 
-      <label  for="tax" class="col-sm-3 control-label">
-        <a href="https://www.gov.uk/vehicle-tax-rate-tables">Annual Road Fund Licence</a></label>
+      <label  for="tax" class="col-sm-2 control-label">Annual Road Fund Licence(£)</label>
       <div class="col-sm-2">
         <input type="number" class="form-control" ng-model='compCtrl.tax' required min="1"  placeholder='*'>
       </div>
+      <label  for="tax" class="col-sm-3 control-label">
+        <a href="https://www.gov.uk/vehicle-tax-rate-tables" target="_blank">Link to Gov Car Tax website</a></label>
     </div>
   </div>
   
@@ -159,11 +160,6 @@
             <input type="number" class="form-control" ng-model='compCtrl.lease.term' ng-required='compCtrl.foLease=="True"' placeholder='*' min="1">
           </div>
 
-          <label  for="initial_payment" class="col-sm-2 control-label">Initial payment(£)</label>
-          <div class="col-sm-2">
-            <input type="number" class="form-control" ng-model='compCtrl.lease.initial_payment' placeholder='*' ng-required='compCtrl.foLease=="True"'  min="1">
-          </div>
-
           <label  for="extras" class="col-sm-2 control-label">Extras(£)</label>
           <div class="col-sm-2">
             <input type="number" class="form-control" ng-model='compCtrl.lease.extras'  min="1"  placeholder='*' ng-required='compCtrl.foLease=="True"'>
@@ -171,24 +167,29 @@
         </div>
 
         <div class="form-group">
-          <label  for="monthly" class="col-sm-2 control-label">Monthly(£)</label>
+
+          <label  for="initial_payment" class="col-sm-2 control-label">Initial payment(£)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" ng-model='compCtrl.lease.initial_payment' placeholder='*' ng-required='compCtrl.foLease=="True"'  min="1">
+          </div>
+
+          <label  for="monthly" class="col-sm-2 control-label">Monthly Payment(£)</label>
           <div class="col-sm-2">
             <input type="number" class="form-control" ng-model='compCtrl.lease.monthly'  min="1"  placeholder='*' ng-required='compCtrl.foLease=="True"'>
-          </div>
-
-          <label  for="actual_annual" class="col-sm-2 control-label">Annual mileages</label>
-          <div class="col-sm-2">
-            <input type="number" class="form-control" ng-model='compCtrl.lease.actual_annual' min="1">
-          </div>
-
-          <label  for="include_mileages" class="col-sm-2 control-label">Include milages</label>
-          <div class="col-sm-2">
-            <input type="number" class="form-control" ng-model='compCtrl.lease.include_mileages' min="1">
           </div>
         </div>
 
         <div class="form-group">
-          <label  for="price_per_mile" class="col-sm-2 control-label">Price (£/mile)</label>
+          <label  for="actual_annual" class="col-sm-2 control-label">Predicted mileage(miles/yr)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" ng-model='compCtrl.lease.actual_annual' min="1">
+          </div>
+
+          <label  for="include_mileages" class="col-sm-2 control-label">Included milage(miles/yr)</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" ng-model='compCtrl.lease.include_mileages' min="1">
+          </div>
+          <label  for="price_per_mile" class="col-sm-2 control-label">Price per excess mile (£/mile)</label>
           <div class="col-sm-2">
             <input type="number" class="form-control" ng-model='compCtrl.lease.price_per_mile' min="0">
           </div>
@@ -228,20 +229,30 @@
   </div>
   <div class='well payGraph' ng-show="compCtrl.showGraph=='True'">
   </div>
+  <div class='well'  ng-show="compCtrl.showGraph=='True'">
+    <p>
+      These figures compare the true cost of financing the car. For each type they include the relevant adjustments. For example, for HP you'll have paid off all the finance but will have equity in the car depending on its depreciation. Here the True Monthly cost is therefore what it's cost you in depreciation, plus interest, plus road fund licence over the period. Whilst your actual monthly payments will be higher, you can now compare this method with the others. 
+    </p>
+    <p>
+      In simple terms, you're looking for the lowest True Monthly cost, with a Regular monthly payment you can manage. 
+    </p>
+  </div>
   <table class="table" ng-show="compCtrl.showGraph=='True'">
     <caption>Total spend £ per finance type</caption>
     <thead>
       <tr>
         <th>Financial types</th>
-        <th>True monthly cost</th>
         <th>Regular monthly payment</th>
+        <th>True monthly cost</th>
+        <th>Total Cost for Comparison</th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat='finance_type in result.values'>
         <td ng-bind="finance_type['financial_option']"></td>
-        <td ng-bind="finance_type['True monthly cost']"></td>
         <td ng-bind="finance_type['Regular monthly payment']"></td>
+        <td ng-bind="finance_type['True monthly cost']"></td>
+        <td ng-bind="finance_type['Total Cost for Comparison']"></td>
       </tr>
     </tbody>
   </table>

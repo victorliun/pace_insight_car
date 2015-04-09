@@ -34,7 +34,18 @@ function create_graph(ddata){
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  var data = ddata.values;
+  var data = [];
+  // trim un-want values
+  for (var i=0;i < ddata.values.length; i++){
+    var finance_price = {};
+    for (var key in ddata.values[i]){
+      if(key !== 'Total Cost for Comparison')
+        finance_price[key] = ddata.values[i][key]
+    }
+    data.push(finance_price);
+  }
+  console.log(data);
+
   var financial_options = d3.keys(data[0]).filter(function(key) { return key !== "financial_option" });
 
   data.forEach(function(d) {

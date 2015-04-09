@@ -6,6 +6,10 @@
         $scope.carmakes = [];
         $scope.carModels = [];
         $scope.carVersions = [];
+        $scope.compCtrl.hp = {};
+        $scope.compCtrl.pcp = {};
+        $scope.compCtrl.lease = {};
+        $scope.compCtrl.loan = {};
         var params = {'format': 'json'};
         $http.get('/depreciation/carmakes/', { params: params }
             ).success(
@@ -73,6 +77,9 @@
                 function(failure) { console.log("failed :(", failure); }
             );
         };
+        $scope.$watch('compCtrl.extraPrice', function(newValue, oldValue) {
+          $scope.compCtrl.lease.extras = newValue;
+        });
 
     }]);
 

@@ -30,7 +30,7 @@ def graph_data_api(request):
     extra_price = int(comp_form.get('extraPrice', 0))
     depreciation_id = int(comp_form['depreciationId'])
     tax = int(comp_form['tax'])
-    stick_price = (total_price + extra_price) * (1 - discount / 100.0)
+    stick_price = (total_price + extra_price) - discount
 
     px_amount = int(comp_form.get('pxAmount', 0))
     deposit_amount = int(comp_form.get('depositAmount', 0))
@@ -52,6 +52,7 @@ def graph_data_api(request):
                 round(hp.real_world_monthly(tax))),
             'Regular monthly payment': int(round(hp.actual_monthly)),
             'financial_option': 'HP',
+            "Total Cost for Comparison" : int(round(hp.total_payable(tax)))
         }
         data['values'].append(hp_result)
 
@@ -75,6 +76,7 @@ def graph_data_api(request):
                 round(pcp.real_world_monthly(tax))),
             'Regular monthly payment': int(round(pcp.actual_monthly)),
             'financial_option': 'PCP',
+            "Total Cost for Comparison" : int(round(pcp.total_payable(tax)))
         }
         data['values'].append(pcp_result)
 
@@ -104,6 +106,7 @@ def graph_data_api(request):
                 round(lease.effective_monthly)),
             'Regular monthly payment': int(round(lease.actual_monthly)),
             'financial_option': 'LEASE',
+            "Total Cost for Comparison" : int(round(lease.total_payable()))
         }
         data['values'].append(lease_result)
     
@@ -125,6 +128,7 @@ def graph_data_api(request):
                 round(loan.real_world_monthly(tax))),
             'Regular monthly payment': int(round(loan.actual_monthly)),
             'financial_option': 'LOAN',
+            "Total Cost for Comparison" : int(round(loan.total_payable(tax)))
         }
         data['values'].append(loan_result)
     
@@ -135,6 +139,7 @@ def graph_data_api(request):
         {
             'True monthly cost': 408, 
             'Regular monthly payment': 716,
+            "Total Cost for Comparison" : 1000,
             'financial_option': 'HP',
         },
         {
@@ -153,5 +158,6 @@ def graph_data_api(request):
             'financial_option': 'LOAN',
         },
     ]}
-  
+    sorted_values = sorted(data['values'], key=lambda x:x['True monthly cost'])
+    data['values'] = sorted_values
     return JsonResponse(data)

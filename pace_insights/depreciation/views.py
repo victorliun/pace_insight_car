@@ -27,13 +27,14 @@ def graph_data_api(request):
     data['values'] = []
     discount = float(comp_form.get('discount', 0))
     total_price = int(comp_form['totalPrice'])
+    extra_price = int(comp_form.get('extraPrice', 0))
     depreciation_id = int(comp_form['depreciationId'])
-
-    stick_price = total_price * (1 - discount / 100.0)
+    tax = int(comp_form['tax'])
+    stick_price = (total_price + extra_price) * (1 - discount / 100.0)
 
     px_amount = int(comp_form.get('pxAmount', 0))
     deposit_amount = int(comp_form.get('depositAmount', 0))
-    if comp_form.has_key('hp'):
+    if comp_form.get('foHP') == 'True':
         hp_data = json.loads(comp_form.get('hp').decode('cp1252'))
         loan_at = hp_data['loan_at'] / 100.0
         loan_at_end = hp_data.get('loan_at_end', 0)
@@ -46,16 +47,15 @@ def graph_data_api(request):
             deposit_amount=deposit_amount,
             depreciation_id=depreciation_id
         )
-        tax = hp_data['tax']
         hp_result = {
-            'Real World Out of Pocket': int(
+            'True monthly cost': int(
                 round(hp.real_world_monthly(tax))),
-            'Effective Monthly': int(round(hp.actual_monthly)),
+            'Regular monthly payment': int(round(hp.actual_monthly)),
             'financial_option': 'HP',
         }
         data['values'].append(hp_result)
 
-    if comp_form.has_key('pcp'):
+    if comp_form.get('foPCP') == 'True':
         pcp_data = json.loads(comp_form.get('pcp').decode('cp1252'))
         loan_at = pcp_data['loan_at'] / 100.0
         ballon_value = pcp_data['ballon_value'] / 100.0
@@ -69,17 +69,16 @@ def graph_data_api(request):
             deposit_amount=deposit_amount,
             depreciation_id=depreciation_id
         )
-        tax = pcp_data['tax']
         pcp.set_loan_at_end(pcp.ballon_est)
         pcp_result = {
-            'Real World Out of Pocket': int(
+            'True monthly cost': int(
                 round(pcp.real_world_monthly(tax))),
-            'Effective Monthly': int(round(pcp.actual_monthly)),
+            'Regular monthly payment': int(round(pcp.actual_monthly)),
             'financial_option': 'PCP',
         }
         data['values'].append(pcp_result)
 
-    if comp_form.has_key('lease'):
+    if comp_form.get('foLease') == 'True':
         lease_data = json.loads(comp_form.get('lease').decode('cp1252'))
         monthly = lease_data['monthly']
         initial_payment = lease_data['initial_payment']
@@ -101,14 +100,14 @@ def graph_data_api(request):
             depreciation_id=depreciation_id
         )
         lease_result = {
-            'Real World Out of Pocket': int(
+            'True monthly cost': int(
                 round(lease.effective_monthly)),
-            'Effective Monthly': int(round(lease.actual_monthly)),
+            'Regular monthly payment': int(round(lease.actual_monthly)),
             'financial_option': 'LEASE',
         }
         data['values'].append(lease_result)
     
-    if comp_form.has_key('loan'):
+    if comp_form.get('foLoan') == 'True':
         loan_data = json.loads(comp_form.get('loan').decode('cp1252'))
         loan_at = loan_data['loan_at'] / 100
         loan_at_end = loan_data.get('loan_at_end',0)
@@ -121,11 +120,10 @@ def graph_data_api(request):
             deposit_amount=deposit_amount,
             depreciation_id=depreciation_id
         )
-        tax = loan_data['tax']
         loan_result = {
-            'Real World Out of Pocket': int(
+            'True monthly cost': int(
                 round(loan.real_world_monthly(tax))),
-            'Effective Monthly': int(round(loan.actual_monthly)),
+            'Regular monthly payment': int(round(loan.actual_monthly)),
             'financial_option': 'LOAN',
         }
         data['values'].append(loan_result)
@@ -135,23 +133,23 @@ def graph_data_api(request):
     'budget': 300,
     'values': [
         {
-            'Real World Out of Pocket': 408, 
-            'Effective Monthly': 716,
+            'True monthly cost': 408, 
+            'Regular monthly payment': 716,
             'financial_option': 'HP',
         },
         {
-            'Real World Out of Pocket': 500, 
-            'Effective Monthly': 463,
+            'True monthly cost': 500, 
+            'Regular monthly payment': 463,
             'financial_option': 'PCP',
         },
         {
-            'Real World Out of Pocket': 408, 
-            'Effective Monthly': 313,
+            'True monthly cost': 408, 
+            'Regular monthly payment': 313,
             'financial_option': 'LEASE',
         },
         {
-            'Real World Out of Pocket': 336, 
-            'Effective Monthly': 674,
+            'True monthly cost': 336, 
+            'Regular monthly payment': 674,
             'financial_option': 'LOAN',
         },
     ]}

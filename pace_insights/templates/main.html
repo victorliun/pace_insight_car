@@ -3,7 +3,7 @@
 {%block page_body%}
 <div class=''>
 <form class="form-horizontal" name="compareForm" novalidate ng-controller='CompareFormController as compCtrl' ng-submit="compareForm.$valid && submit()">
-  <h3>Choose your favorate car</h3>
+  <h3>Choose your favourite car</h3>
   <div class='well'>
     <div class="form-group">
       <label for="carMake" class="col-sm-2 control-label">Car Make</label>
@@ -55,33 +55,45 @@
   <h3>Input the price and your budget</h3>
   <div class="well">
     <div class="form-group">
-      <label  for="carModel" class="col-sm-3 control-label">Total Price(£)</label>
-      <div class="col-sm-3">
-        <input type="number" class="form-control" id="total_price" ng-model='compCtrl.totalPrice' required min="1">
+      <label  for="carModel" class="col-sm-2 control-label">
+        <small ng-hide="compareForm.$valid">*</small>Total Price(£)</label>
+      <div class="col-sm-2">
+        <input type="number" class="form-control" name="total_price" ng-model='compCtrl.totalPrice' required min="1">
       </div>
 
-      <label  for="carModel" class="col-sm-3 control-label">Discount(%)</label>
-      <div class="col-sm-3">
+      <label  for="carModel" class="col-sm-2 control-label">Extras(£)</label>
+      <div class="col-sm-2">
+        <input type="number" class="form-control" id="extra_price" ng-model='compCtrl.extraPrice' min="1">
+      </div>
+
+      <label  for="carModel" class="col-sm-2 control-label">Discount(%)</label>
+      <div class="col-sm-2">
         <input type="number" class="form-control" id="discount" ng-model='compCtrl.discount'  min="0" max="100">
       </div>
     </div>
 
     <div class="form-group">
-      <label  for="carModel" class="col-sm-3 control-label">Deposit Amount(£)</label>
-      <div class="col-sm-3">
+      <label  for="carModel" class="col-sm-2 control-label">Deposit Amount(£)</label>
+      <div class="col-sm-2">
         <input type="number" class="form-control" id="deposit_amount" ng-model='compCtrl.depositAmount' min="1">
       </div>
 
-      <label  for="carModel" class="col-sm-4 control-label">Part-Exchange Amount(£)</label>
+      <label  for="carModel" class="col-sm-3 control-label">Part-Exchange Amount(£)</label>
       <div class="col-sm-2">
         <input type="number" class="form-control" id="px_amount" ng-model='compCtrl.pxAmount'  min="1">
       </div>
     </div>
 
     <div class="form-group">
-      <label  for="carModel" class="col-sm-3 control-label">Monthly Budget(£)</label>
-      <div class="col-sm-9">
-        <input type="number" class="form-control" id="monthly_budget" ng-model='compCtrl.monthlyBudget' required min="1">
+      <label  for="carModel" class="col-sm-3 control-label">Target Monthly Budget(£)</label>
+      <div class="col-sm-2">
+        <input type="number" class="form-control" id="monthly_budget" ng-model='compCtrl.monthlyBudget' required min="1" placeholder='*'>
+      </div>
+
+      <label  for="tax" class="col-sm-3 control-label">
+        <a href="https://www.gov.uk/vehicle-tax-rate-tables">Annual Road Fund Licence</a></label>
+      <div class="col-sm-2">
+        <input type="number" class="form-control" ng-model='compCtrl.tax' required min="1"  placeholder='*'>
       </div>
     </div>
   </div>
@@ -107,24 +119,12 @@
         <div class="form-group">
           <label  for="term" class="col-sm-2 control-label">Term (years)</label>
           <div class="col-sm-2">
-            <input type="number" class="form-control" ng-model='compCtrl.hp.term' ng-required='compCtrl.foHP=="True"' min="1">
+            <input type="number" class="form-control" ng-model='compCtrl.hp.term' ng-required='compCtrl.foHP=="True"' min="1"  placeholder='*'>
           </div>
 
           <label  for="loan_at" class="col-sm-2 control-label">Loan at rate(%)</label>
           <div class="col-sm-2">
-            <input type="number" class="form-control" ng-model='compCtrl.hp.loan_at' ng-required='compCtrl.foHP=="True"'  min="0" max="100">
-          </div>
-
-          <label  for="loanAtEnd" class="col-sm-2 control-label">Loan at end(£)</label>
-          <div class="col-sm-2">
-            <input type="number" class="form-control" ng-model='compCtrl.hp.loan_at_end'  min="0" placeholder='0'>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label  for="tax" class="col-sm-2 control-label">Tax (yearly £)</label>
-          <div class="col-sm-2">
-            <input type="number" class="form-control" ng-model='compCtrl.hp.tax' ng-required='compCtrl.foHP=="True"' min="1">
+            <input type="number" class="form-control" ng-model='compCtrl.hp.loan_at' ng-required='compCtrl.foHP=="True"'  placeholder='*' min="0" max="100">
           </div>
         </div>
       </div>
@@ -135,27 +135,19 @@
         <div class="form-group">
           <label  for="term" class="col-sm-2 control-label">Term (years)</label>
           <div class="col-sm-2">
-            <input type="number" class="form-control" ng-model='compCtrl.pcp.term' ng-required='compCtrl.foPCP=="True"' min="1">
+            <input type="number" class="form-control" ng-model='compCtrl.pcp.term' ng-required='compCtrl.foPCP=="True"'  placeholder='*' min="1">
           </div>
 
           <label  for="loan_at" class="col-sm-2 control-label">Loan at rate(%)</label>
           <div class="col-sm-2">
-            <input type="number" class="form-control" ng-model='compCtrl.pcp.loan_at' ng-required='compCtrl.foPCP=="True"'  min="0" max="100">
+            <input type="number" class="form-control" ng-model='compCtrl.pcp.loan_at' ng-required='compCtrl.foPCP=="True"'  placeholder='*' min="0" max="100">
           </div>
 
           <label  for="loanAtEnd" class="col-sm-2 control-label">Ballon/Value(%)</label>
           <div class="col-sm-2">
-            <input type="number" class="form-control" ng-model='compCtrl.pcp.ballon_value'  min="0" max='100' ng-required='compCtrl.foPCP=="True"' >
+            <input type="number" class="form-control" ng-model='compCtrl.pcp.ballon_value'  min="0" max='100' placeholder='*' ng-required='compCtrl.foPCP=="True"' >
           </div>
         </div>
-
-        <div class="form-group">
-          <label  for="tax" class="col-sm-2 control-label">Tax (yearly £)</label>
-          <div class="col-sm-2">
-            <input type="number" class="form-control" ng-model='compCtrl.pcp.tax' ng-required='compCtrl.foPCP=="True"' min="1">
-          </div>
-        </div>
-
       </div>
     </div>
     <div ng-show="compCtrl.foLease == 'True'" >
@@ -164,24 +156,24 @@
         <div class="form-group">
           <label  for="term" class="col-sm-2 control-label">Term (years)</label>
           <div class="col-sm-2">
-            <input type="number" class="form-control" ng-model='compCtrl.lease.term' ng-required='compCtrl.foLease=="True"' min="1">
+            <input type="number" class="form-control" ng-model='compCtrl.lease.term' ng-required='compCtrl.foLease=="True"' placeholder='*' min="1">
           </div>
 
           <label  for="initial_payment" class="col-sm-2 control-label">Initial payment(£)</label>
           <div class="col-sm-2">
-            <input type="number" class="form-control" ng-model='compCtrl.lease.initial_payment' ng-required='compCtrl.foLease=="True"'  min="1">
+            <input type="number" class="form-control" ng-model='compCtrl.lease.initial_payment' placeholder='*' ng-required='compCtrl.foLease=="True"'  min="1">
           </div>
 
           <label  for="extras" class="col-sm-2 control-label">Extras(£)</label>
           <div class="col-sm-2">
-            <input type="number" class="form-control" ng-model='compCtrl.lease.extras'  min="1"  ng-required='compCtrl.foLease=="True"'>
+            <input type="number" class="form-control" ng-model='compCtrl.lease.extras'  min="1"  placeholder='*' ng-required='compCtrl.foLease=="True"'>
           </div>
         </div>
 
         <div class="form-group">
           <label  for="monthly" class="col-sm-2 control-label">Monthly(£)</label>
           <div class="col-sm-2">
-            <input type="number" class="form-control" ng-model='compCtrl.lease.monthly'  min="1"  ng-required='compCtrl.foLease=="True"'>
+            <input type="number" class="form-control" ng-model='compCtrl.lease.monthly'  min="1"  placeholder='*' ng-required='compCtrl.foLease=="True"'>
           </div>
 
           <label  for="actual_annual" class="col-sm-2 control-label">Annual mileages</label>
@@ -209,27 +201,19 @@
         <div class="form-group">
           <label  for="term" class="col-sm-2 control-label">Term (years)</label>
           <div class="col-sm-2">
-            <input type="number" class="form-control" id="total_price" ng-model='compCtrl.loan.term' ng-required='compCtrl.foLoan=="True"' min="1">
+            <input type="number" class="form-control" id="total_price" ng-model='compCtrl.loan.term'  placeholder='*' ng-required='compCtrl.foLoan=="True"' min="1">
           </div>
 
           <label  for="loan_at" class="col-sm-2 control-label">Loan at rate(%)</label>
           <div class="col-sm-2">
-            <input type="number" class="form-control" id="loan_at" ng-model='compCtrl.loan.loan_at' ng-required='compCtrl.foLoan=="True"'  min="0" max="100">
+            <input type="number" class="form-control" id="loan_at" ng-model='compCtrl.loan.loan_at'  placeholder='*' ng-required='compCtrl.foLoan=="True"'  min="0" max="100">
           </div>
 
           <label  for="loanAtEnd" class="col-sm-2 control-label">Loan at end(£)</label>
           <div class="col-sm-2">
-            <input type="number" class="form-control" id="loan_at_end" ng-model='compCtrl.loan.loan_at_end'  min="0" placeholder='0'>
+            <input type="number" class="form-control" id="loan_at_end" ng-model='compCtrl.loan.loan_at_end'  min="0" placeholder='0' ng-init='compCtrl.loan.loan_at_end=0'>
           </div>
         </div>
-
-        <div class="form-group">
-          <label  for="tax" class="col-sm-2 control-label">Tax (yearly £)</label>
-          <div class="col-sm-2">
-            <input type="number" class="form-control" ng-model='compCtrl.loan.tax' ng-required='compCtrl.foLoan=="True"' min="1">
-          </div>
-        </div>
-
       </div>
     </div>
   </div>
@@ -244,6 +228,23 @@
   </div>
   <div class='well payGraph' ng-show="compCtrl.showGraph=='True'">
   </div>
+  <table class="table" ng-show="compCtrl.showGraph=='True'">
+    <caption>Total spend £ per finance type</caption>
+    <thead>
+      <tr>
+        <th>Financial types</th>
+        <th>True monthly cost</th>
+        <th>Regular monthly payment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat='finance_type in result.values'>
+        <td ng-bind="finance_type['financial_option']"></td>
+        <td ng-bind="finance_type['True monthly cost']"></td>
+        <td ng-bind="finance_type['Regular monthly payment']"></td>
+      </tr>
+    </tbody>
+  </table>
 </form>
 </div>
 {%endblock%}

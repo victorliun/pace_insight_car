@@ -1,8 +1,8 @@
 function create_graph(ddata){
   console.log(ddata);
-  var margin = {top: 20, right: 20, bottom: 30, left: 40},
-      width = 400 - margin.left - margin.right,
-      height = 200 - margin.top - margin.bottom;
+  var margin = {top: 30, right: 20, bottom: 40, left: 50},
+      width = 500 - margin.left - margin.right,
+      height = 300 - margin.top - margin.bottom;
 
   var x0 = d3.scale.ordinal()
       .rangeRoundBands([0, width], .1);
@@ -44,10 +44,12 @@ function create_graph(ddata){
   x0.domain(data.map(function(d) { return d.financial_option; }));
 //   x1.domain(data.map(function(d) { return d.financial_option; }));
   x1.domain(financial_options).rangeRoundBands([0, x0.rangeBand()]);
-  y.domain([0, d3.max(data, function(d) { 
+  var max_price = d3.max(data, function(d) { 
     return d3.max(d.prices, function(d) { 
-      return d.value; }); })]);
-
+      return d.value;
+    });
+  })
+  y.domain([0,d3.max([max_price, ddata.budget])]);
   svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
@@ -81,7 +83,7 @@ function create_graph(ddata){
       .data(financial_options.slice().reverse())
       .enter().append("g")
       .attr("class", "legend")
-      .attr("transform", function(d, i) { return "translate(10," + i * 12 + ")"; });
+      .attr("transform", function(d, i) { return "translate(10, -" + (i+1) * 12 + ")"; });
 
   legend.append("rect")
       .attr("x", width - 18)
@@ -109,4 +111,11 @@ function create_graph(ddata){
       .datum(data)
       .attr("class", "line")
       .attr("d", line);
+
+  svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", height + margin.bottom - 5)
+        .attr("text-anchor", "middle")  
+        .style("text-decoration", "underline")  
+        .text("Estimated Monthly Cost Comparison");
 };

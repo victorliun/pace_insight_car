@@ -50,6 +50,8 @@
                 // console.log(data);
                 $scope.depreciation = data[0];
                 $scope.compCtrl.depreciationId = $scope.depreciation['id'];
+                var d = $scope.depreciation['year_0_mock'];
+                $scope.compCtrl.totalPrice = parseInt(d.replace(',','').replace('£',''));
             }).
             error(
                 function(failure) { console.log("failed :(", failure); }
@@ -65,11 +67,13 @@
                 angular.element(document.querySelectorAll("div.payGraph")).html('');
                 create_graph(data);
                 $scope.compCtrl.showGraph = 'True';
+                $scope.result = data;
             }).
             error(
                 function(failure) { console.log("failed :(", failure); }
             );
-        }
+        };
+
     }]);
 
 

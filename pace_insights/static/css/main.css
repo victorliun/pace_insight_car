@@ -110,3 +110,10 @@ body {
   stroke-width: 1.5px;
   stroke-dasharray: 3,3;
 }
+.subtitle {
+  font-size: 80%;
+}
+
+.well.payGraph {
+  text-align: center;
+}

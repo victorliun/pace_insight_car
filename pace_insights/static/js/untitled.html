@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>JS Bin</title>
+<style>
+
+body {
+  font: 14px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: steelblue;
+}
+
+.x.axis path {
+  display: none;
+}
+  
+.line {
+  fill: none;
+  stroke: #444;
+  stroke-width: 1.5px;
+}
+
+
+</style>
+</head>
+<body>
+  
+<script src="../js/graph.js"></script>
+<script src="../vendor/d3.v3.min.js"></script>
+<script>
+var ddata = {
+    'budget': 3000,
+    'values': [
+        {
+            'Real World Out of Pocket': 408, 
+            'Effective Monthly': 416,
+            'financial_option': 'HP',
+        },
+        {
+            'Real World Out of Pocket': 500, 
+            'Effective Monthly': 463,
+            'financial_option': 'PCP',
+        },
+        {
+            'Real World Out of Pocket': 408, 
+            'Effective Monthly': 313,
+            'financial_option': 'LEASE',
+        },
+        {
+            'Real World Out of Pocket': 336, 
+            'Effective Monthly': 674,
+            'financial_option': 'LOAN',
+        },
+    ]};
+//create_graph(ddata);
+// var data = [{ "letter": "A", "frequency": .08167},];
+  
+// var margin = {top: 20, right: 20, bottom: 30, left: 40},
+//     width = 960 - margin.left - margin.right,
+//     height = 500 - margin.top - margin.bottom;
+
+// var formatPercent = d3.format(".0%");
+
+// var x = d3.scale.ordinal()
+//     .rangeRoundBands([0, width], .1);
+
+// var x2 = d3.scale.ordinal()
+//   .rangeBands([0, width], 0);
+ 
+  
+// var y = d3.scale.linear()
+//     .range([height, 0]);
+
+// var xAxis = d3.svg.axis()
+//     .scale(x)
+//     .orient("bottom"); 
+
+// var yAxis = d3.svg.axis()
+//     .scale(y)
+//     .orient("left")
+//     .tickFormat(formatPercent);
+
+// var svg = d3.select("body").append("svg")
+//     .attr("width", width + margin.left + margin.right)
+//     .attr("height", height + margin.top + margin.bottom)
+//   .append("g")
+//     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  
+//   x.domain(data.map(function(d) { return d.letter; }));
+//   x2.domain(data.map(function(d) { return d.letter; }));
+//   y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+
+//   svg.append("g")
+//       .attr("class", "x axis")
+//       .attr("transform", "translate(0," + height + ")")
+//       .call(xAxis);
+
+//   svg.append("g")
+//       .attr("class", "y axis")
+//       .call(yAxis)
+//     .append("text")
+//       .attr("transform", "rotate(-90)")
+//       .attr("y", 6)
+//       .attr("dy", ".71em")
+//       .style("text-anchor", "end")
+//       .text("Frequency");
+
+
+ 
+//  var line = d3.svg.line()
+//     .x(function(d, i) { 
+//       return x2(d.letter) + i; })
+//     .y(function(d, i) { return y(0.01); }); 
+  
+//   svg.append("path")
+//       .datum(data)
+//       .attr("class", "line")
+//       .attr("d", line);
+
+  
+</script>  
+<div class='well payGraph'></div>
+
+</body>
+<button onclick="create_graph(ddata)">click</button>
+</html>

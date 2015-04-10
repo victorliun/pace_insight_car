@@ -127,6 +127,5 @@ function create_graph(ddata){
         .attr("x", (width / 2))             
         .attr("y", height + margin.bottom - 5)
         .attr("text-anchor", "middle")  
-        .style("text-decoration", "underline")  
-        .text("Estimated Monthly Cost Comparison");
+        .style("text-decoration", "underline");
 };

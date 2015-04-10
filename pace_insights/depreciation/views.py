@@ -34,6 +34,8 @@ def graph_data_api(request):
 
     px_amount = int(comp_form.get('pxAmount', 0))
     deposit_amount = int(comp_form.get('depositAmount', 0))
+    
+    term = int(comp_form['term'])
     if comp_form.get('foHP') == 'True':
         hp_data = json.loads(comp_form.get('hp').decode('cp1252'))
         loan_at = hp_data['loan_at'] / 100.0
@@ -41,7 +43,7 @@ def graph_data_api(request):
         hp = HP(
             loan_at=loan_at,
             loan_at_end=loan_at_end,
-            term=hp_data['term'],
+            term=hp_data.get('term') or term,
             stick_price=int(stick_price),
             px_amount=px_amount,
             deposit_amount=deposit_amount,
@@ -59,12 +61,12 @@ def graph_data_api(request):
     if comp_form.get('foPCP') == 'True':
         pcp_data = json.loads(comp_form.get('pcp').decode('cp1252'))
         loan_at = pcp_data['loan_at'] / 100.0
-        ballon_value = pcp_data['ballon_value'] / 100.0
+        ballon_value = int(pcp_data['ballon_value'])
 
         pcp = PCP(
             ballon_value=ballon_value,
             loan_at=loan_at,
-            term=pcp_data['term'],
+            term=pcp_data.get('term') or term,
             stick_price=int(stick_price),
             px_amount=px_amount,
             deposit_amount=deposit_amount,
@@ -92,7 +94,7 @@ def graph_data_api(request):
             initial_payment=initial_payment,
             monthly=monthly,
             extras=extras,
-            term=lease_data['term'],
+            term=lease_data.get('term') or term,
             stick_price=int(stick_price),
             actual_annual=actual_annual,
             include=include_mileages,
@@ -116,7 +118,7 @@ def graph_data_api(request):
         loan_at_end = loan_data.get('loan_at_end',0)
         loan = Loan(
             loan_at=loan_at,
-            term=loan_data['term'],
+            term=loan_data.get('term') or term,
             loan_at_end=loan_at_end,
             stick_price=int(stick_price),
             px_amount=px_amount,

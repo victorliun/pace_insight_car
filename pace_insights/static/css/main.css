@@ -99,6 +99,11 @@ body {
 
 .ng-invalid.ng-dirty, .ng-invalid {
   border-color: red;
+  content: "*****";
+}
+
+.table td, .table th {
+   text-align: center;   
 }
 
 .ng-valid.ng-dirty{

@@ -81,6 +81,9 @@
           $scope.compCtrl.lease.extras = newValue;
         });
 
+        $scope.checkdata = function(data){
+            console.log(data);
+        }
     }]);
 
 

@@ -171,9 +171,8 @@
 
           <label  for="extras" class="col-sm-2 control-label">Extras(£)</label>
           <div class="col-sm-2">
-            <input type="number" class="form-control" ng-model='compCtrl.lease.extras' name="lease_extras" min="1"  placeholder='*' ng-required='compCtrl.foLease=="True"'>
+            <input type="number" class="form-control" ng-model='compCtrl.lease.extras' name="lease_extras" min="0" >
           </div>
-        <span ng-show="compareForm.lease_extras.$invalid" class="help-block">* Please fill it right.</span>
         </div>
 
         <div class="form-group">

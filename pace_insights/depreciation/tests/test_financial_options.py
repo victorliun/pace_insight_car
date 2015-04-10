@@ -37,7 +37,7 @@ class FinancialOptionsTest(TestCase):
 
     def test_pcp(self):
         pcp = PCP(
-            ballon_value=0.9,
+            ballon_value=13970,
             loan_at=0.07,
             term=4,
             stick_price=32485,
@@ -45,14 +45,12 @@ class FinancialOptionsTest(TestCase):
             depreciation_id=self.depreciation_id
         )
         self.assertEqual(pcp.finance_value, 29905)
-        self.assertEqual(pcp.ballon_est, 13969.8)
         self.assertEqual(pcp.equity_value, 15522)
-        self.assertEqual(pcp.pure_equity_value(), 1552.20)
-        pcp.set_loan_at_end(pcp.ballon_est)
+        self.assertEqual(pcp.pure_equity_value(), 1552.0)
         self.assertEqual(pcp.actual_monthly, 463.08)
         self.assertEqual(pcp.total_payable(180), 25527.84)
-        self.assertEqual(pcp.value_score(180), 23975.64)
-        self.assertEqual(pcp.real_world_monthly(180), 499.49)
+        self.assertEqual(pcp.value_score(180), 23975.84)
+        self.assertEqual(pcp.real_world_monthly(180), 499.5)
 
     def test_lease(self):
         lease = Lease(

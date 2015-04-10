@@ -56,6 +56,9 @@
                 $scope.compCtrl.depreciationId = $scope.depreciation['id'];
                 var d = $scope.depreciation['year_0_mock'];
                 $scope.compCtrl.totalPrice = parseInt(d.replace(',','').replace('£',''));
+                var last_price = parseInt($scope.depreciation['year_4_mock']
+                    .replace(',','').replace('£',''));
+                $scope.compCtrl.pcp.ballon_value = Math.round(last_price * 0.9);
             }).
             error(
                 function(failure) { console.log("failed :(", failure); }
@@ -81,9 +84,6 @@
           $scope.compCtrl.lease.extras = newValue;
         });
 
-        $scope.checkdata = function(data){
-            console.log(data);
-        }
     }]);
 
 

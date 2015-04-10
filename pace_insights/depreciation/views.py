@@ -54,7 +54,7 @@ def graph_data_api(request):
                 round(hp.real_world_monthly(tax))),
             'Regular monthly payment': int(round(hp.actual_monthly)),
             'financial_option': 'HP',
-            "Total Cost for Comparison" : int(round(hp.total_payable(tax)))
+            "Total Cost for Comparison" : int(round(hp.value_score(tax)))
         }
         data['values'].append(hp_result)
 
@@ -72,13 +72,12 @@ def graph_data_api(request):
             deposit_amount=deposit_amount,
             depreciation_id=depreciation_id
         )
-        pcp.set_loan_at_end(pcp.ballon_est)
         pcp_result = {
             'True monthly cost': int(
                 round(pcp.real_world_monthly(tax))),
             'Regular monthly payment': int(round(pcp.actual_monthly)),
             'financial_option': 'PCP',
-            "Total Cost for Comparison" : int(round(pcp.total_payable(tax)))
+            "Total Cost for Comparison" : int(round(pcp.value_score(tax)))
         }
         data['values'].append(pcp_result)
 
@@ -86,7 +85,7 @@ def graph_data_api(request):
         lease_data = json.loads(comp_form.get('lease').decode('cp1252'))
         monthly = lease_data['monthly']
         initial_payment = lease_data['initial_payment']
-        extras = lease_data['extras']
+        extras = lease_data.get('extras',0)
         actual_annual = lease_data.get('actual_annual', 0)
         include_mileages = lease_data.get('include_mileages', 0)
         price_per_mile = lease_data.get('price_per_mile', 0)
@@ -108,7 +107,7 @@ def graph_data_api(request):
                 round(lease.effective_monthly)),
             'Regular monthly payment': int(round(lease.actual_monthly)),
             'financial_option': 'LEASE',
-            "Total Cost for Comparison" : int(round(lease.total_payable()))
+            "Total Cost for Comparison" : int(round(lease.value_score()))
         }
         data['values'].append(lease_result)
     
@@ -130,7 +129,7 @@ def graph_data_api(request):
                 round(loan.real_world_monthly(tax))),
             'Regular monthly payment': int(round(loan.actual_monthly)),
             'financial_option': 'LOAN',
-            "Total Cost for Comparison" : int(round(loan.total_payable(tax)))
+            "Total Cost for Comparison" : int(round(loan.value_score(tax)))
         }
         data['values'].append(loan_result)
     

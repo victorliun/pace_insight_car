@@ -92,21 +92,14 @@ class PCP(FinancailOption):
     def __init__(self, ballon_value=0, *args, **kwargs):
         self.ballon_value = ballon_value
         super(PCP, self).__init__(*args, **kwargs)
-
-    def set_loan_at_end(self, loan_at_end):
-        self.loan_at_end = loan_at_end
+        self.loan_at_end = ballon_value
 
     @property
     def equity_value(self):
         return self.last_depr
 
-    @property
-    def ballon_est(self):
-        ballon_est = round(self.ballon_value * self.equity_value, 2)
-        return ballon_est
-
     def pure_equity_value(self):
-        pev = round(self.equity_value - self.ballon_est, 2)
+        pev = round(self.equity_value - self.ballon_value, 2)
         return pev
 
     def total_payable(self, tax_per_year=0):

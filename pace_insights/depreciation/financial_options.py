@@ -19,7 +19,7 @@ class FinancailOption(object):
     def __init__(self, loan_at=0.1, stick_price=0,
             deposit_amount=0, px_amount=0, term=4,
             depreciation_id=None, loan_at_end=0):
-        print loan_at, loan_at_end, depreciation_id, deposit_amount, term, stick_price
+        # print loan_at, loan_at_end, depreciation_id, deposit_amount, term, stick_price
         self.loan_at = loan_at
         self.total_months = term * 12
         self.total_up_front = deposit_amount + px_amount

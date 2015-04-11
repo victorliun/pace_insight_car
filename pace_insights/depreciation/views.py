@@ -113,7 +113,7 @@ def graph_data_api(request):
     
     if comp_form.get('foLoan') == 'True':
         loan_data = json.loads(comp_form.get('loan').decode('cp1252'))
-        print loan_data
+        # print loan_data
         loan_at = loan_data['loan_at'] / 100.0
         loan_at_end = loan_data.get('loan_at_end',0)
         loan = Loan(

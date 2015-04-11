@@ -68,6 +68,9 @@
         $scope.submit = function(){
             // console.log($scope.compCtrl);
             var params = $scope.compCtrl;
+            $scope.submitted = true;
+            if ($scope.compareForm.$invalid)
+                return false;
             $http.get('/depreciation/api/get-graph-data', {params: params})
             .success(function(data){
                 // console.log(data);

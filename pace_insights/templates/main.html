@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {%block page_body%}
 <div class=''>
-<form class="form-horizontal" name="compareForm" novalidate ng-controller='CompareFormController as compCtrl' ng-submit="compareForm.$valid && submit()">
+<form class="form-horizontal" name="compareForm" novalidate ng-controller='CompareFormController as compCtrl' ng-submit="submit()">
   <h3>Choose your favourite car</h3>
   <div class='well'>
     <div class="form-group">
@@ -55,10 +55,10 @@
   <h3>Input the price and your budget</h3>
   <div class="well">
     <div class="form-group">
-      <label  for="carModel" class="col-sm-2 control-label" title="The base price of the car.">Total Price(£)</label>
+      <label  for="carModel" class="col-sm-2 control-label" title="The base price of the car.">List Price(£)</label>
       <div class="col-sm-2">
         <input type="number" class="form-control" name="total_price" ng-model='compCtrl.totalPrice' required min="1">
-        <span ng-show="compareForm.total_price.$invalid" class="help-block">* Please fill it rightly.</span>
+        <span ng-show="(compareForm.total_price.$dirty || submitted) && compareForm.total_price.$invalid" class="help-block">* Please fill in correctly.</span>
       </div>
 
       <label  for="carModel" class="col-sm-2 control-label" title="The total price of all your extras.">Extras(£)</label>
@@ -85,23 +85,23 @@
       <label  for="term" class="col-sm-2 control-label">Term (years)</label>
       <div class="col-sm-2">
         <input type="number" class="form-control" name='term' ng-model='compCtrl.term' required min="1" placeholder='*'>
-        <span ng-show="compareForm.term.$invalid" class="help-block">* Please fill it rightly.</span>
+        <span ng-show="(compareForm.term.$dirty || submitted) && compareForm.term.$invalid" class="help-block">* Please fill in correctly.</span>
       </div>
     </div>
 
     <div class="form-group">
       <label  for="carModel" class="col-sm-2 control-label" title= "What's the maximum you're looking to spend regularly each month on the finance?">Target Monthly Budget(£)</label>
       <div class="col-sm-2">
-        <input type="number" class="form-control" name="monthly_budget" ng-model='compCtrl.monthlyBudget' required min="1" placeholder='*'><span ng-show="compareForm.monthly_budget.$invalid" class="help-block">* Please fill it rightly.</span>
+        <input type="number" class="form-control" name="monthly_budget" ng-model='compCtrl.monthlyBudget' required min="1" placeholder='*'><span ng-show="(compareForm.monthly_budget.$dirty || submitted) && compareForm.monthly_budget.$invalid" class="help-block">* Please fill in correctly.</span>
       </div>
 
       <label  for="tax" class="col-sm-2 control-label" title="What is the annual Road Fund Licence amount. See link for help and use a best average approximation if it is complex.">Annual Road Fund Licence(£)</label>
       <div class="col-sm-2">
         <input type="number" class="form-control" ng-model='compCtrl.tax' required min="1" name='tax' placeholder='*'>
-        <span ng-show="compareForm.monthly_budget.$invalid" class="help-block">* Please fill it rightly.</span>
+        <span ng-show="(compareForm.tax.$dirty || submitted) && compareForm.tax.$invalid" class="help-block">* Please fill in correctly.</span>
       </div>
-      <label  for="tax" class="col-sm-3 control-label">
-        <a href="https://www.gov.uk/vehicle-tax-rate-tables" target="_blank">Link to Gov Car Tax website</a></label>
+      <label for="tax" class="col-sm-3">
+        <a href="https://www.gov.uk/vehicle-tax-rate-tables" target="_blank">Gov Car Tax website</a></label>
     </div>
   </div>
   
@@ -132,7 +132,7 @@
           <label  for="loan_at" class="col-sm-2 control-label">Loan at rate(%)</label>
           <div class="col-sm-2">
             <input type="number" class="form-control" ng-model='compCtrl.hp.loan_at' ng-required='compCtrl.foHP=="True"'  placeholder='*' min="0" max="100" name='hp_rate'>
-            <span ng-show="compareForm.hp_rate.$invalid" class="help-block">* Please fill it rightly.</span>
+            <span ng-show="(compareForm.hp_rate.$dirty || submitted) && compareForm.hp_rate.$invalid" class="help-block">* Please fill in correctly.</span>
           </div>
         </div>
       </div>
@@ -149,13 +149,13 @@
           <label  for="loan_at" class="col-sm-2 control-label">Loan at rate(%)</label>
           <div class="col-sm-2">
             <input type="number" class="form-control" ng-model='compCtrl.pcp.loan_at' ng-required='compCtrl.foPCP=="True"' name='pcp_rate' placeholder='*' min="0" max="100">
-            <span ng-show="compareForm.pcp_rate.$invalid" class="help-block">* Please fill it rightly.</span>
+            <span ng-show="(compareForm.pcp_rate.$dirty || submitted) && compareForm.pcp_rate.$invalid" class="help-block">* Please fill in correctly.</span>
           </div>
 
-          <label  for="loanAtEnd" class="col-sm-2 control-label">Ballon/Value(£)</label>
+          <label title="This is an estimated balloon value. Change to the value you've been quoted." for="loanAtEnd" class="col-sm-2 control-label">Est Balloon Value (£)</label>
           <div class="col-sm-2">
             <input type="number" class="form-control" ng-model='compCtrl.pcp.ballon_value'  min="0"placeholder='*' ng-required='compCtrl.foPCP=="True"' name='pcp_ballon_value'>
-          <span ng-show="compareForm.pcp_ballon_value.$invalid" class="help-block">* Please fill it rightly.</span>
+          <span ng-show="(compareForm.pcp_ballon_value.$dirty || submitted) && compareForm.pcp_ballon_value.$invalid" class="help-block">* Please fill in correctly.</span>
           </div>
         </div>
       </div>
@@ -180,13 +180,13 @@
           <label  for="initial_payment" class="col-sm-2 control-label">Initial payment(£)</label>
           <div class="col-sm-2">
             <input type="number" class="form-control" ng-model='compCtrl.lease.initial_payment' placeholder='*' ng-required='compCtrl.foLease=="True"' name='lease_initial_payment'  min="1">
-            <span ng-show="compareForm.lease_initial_payment.$invalid" class="help-block">* Please fill it rightly.</span>
+            <span ng-show="(compareForm.lease_initial_payment.$dirty || submitted) && compareForm.lease_initial_payment.$invalid" class="help-block">* Please fill in correctly.</span>
           </div>
 
           <label  for="monthly" class="col-sm-2 control-label">Monthly Payment(£)</label>
           <div class="col-sm-2">
             <input type="number" class="form-control" ng-model='compCtrl.lease.monthly'  min="1"  placeholder='*' ng-required='compCtrl.foLease=="True"' name='lease_monthly'>
-          <span ng-show="compareForm.lease_monthly.$invalid" class="help-block">* Please fill it rightly.</span>
+          <span ng-show="(compareForm.lease_monthly.$dirty || submitted) && compareForm.lease_monthly.$invalid" class="help-block">* Please fill in correctly.</span>
           </div>
         </div>
 
@@ -219,10 +219,10 @@
           <label  for="loan_at" class="col-sm-2 control-label">Loan at rate(%)</label>
           <div class="col-sm-2">
             <input type="number" class="form-control" id="loan_at" ng-model='compCtrl.loan.loan_at'  placeholder='*' ng-required='compCtrl.foLoan=="True"'  min="0" max="100" name='loan_rate'>
-          <span ng-show="compareForm.loan_rate.$invalid" class="help-block">* Please fill it rightly.</span>
+          <span ng-show="(compareForm.loan_rate.$dirty || submitted) && compareForm.loan_rate.$invalid" class="help-block">* Please fill in correctly.</span>
           </div>
 
-          <label  for="loanAtEnd" class="col-sm-2 control-label">Loan at end(£)</label>
+          <label  for="loanAtEnd" class="col-sm-2 control-label">Loan Value at end(£)</label>
           <div class="col-sm-2">
             <input type="number" class="form-control" id="loan_at_end" ng-model='compCtrl.loan.loan_at_end'  min="0" placeholder='0' ng-init='compCtrl.loan.loan_at_end=0'>
           </div>

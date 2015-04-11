@@ -78,6 +78,7 @@
                 create_graph(data);
                 $scope.compCtrl.showGraph = 'True';
                 $scope.result = data;
+                $scope.submitted = false;
             }).
             error(
                 function(failure) { console.log("failed :(", failure); }
@@ -86,6 +87,10 @@
         $scope.$watch('compCtrl.extraPrice', function(newValue, oldValue) {
           $scope.compCtrl.lease.extras = newValue;
         });
+
+        $scope.sortByTotalCost = function(val){
+            return val["Total Cost for Comparison"];
+        };
 
     }]);
 

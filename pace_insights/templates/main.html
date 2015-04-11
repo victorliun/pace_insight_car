@@ -262,7 +262,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat='finance_type in result.values'>
+        <tr ng-repeat='finance_type in result.values | orderBy:sortByTotalCost'>
           <td ng-bind="finance_type['financial_option']"></td>
           <td ng-bind="finance_type['Regular monthly payment']"></td>
           <td ng-bind="finance_type['True monthly cost']"></td>

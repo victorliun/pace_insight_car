@@ -88,6 +88,13 @@
           $scope.compCtrl.lease.extras = newValue;
         });
 
+        $scope.$watch('compCtrl.term', function(newValue, oldValue) {
+          $scope.compCtrl.hp.term = newValue;
+          $scope.compCtrl.pcp.term = newValue;
+          $scope.compCtrl.lease.term = newValue;
+          $scope.compCtrl.loan.term = newValue;
+        });
+
         $scope.sortByTotalCost = function(val){
             return val["Total Cost for Comparison"];
         };

@@ -9,6 +9,8 @@ from django.shortcuts import render_to_response
 from .financial_options import (
     HP, PCP, Lease, Loan
 )
+from .utils import parse_args
+
 
 def home(request):
     return render_to_response('main.html')
@@ -19,32 +21,22 @@ def about(request):
 
 
 def graph_data_api(request):
-    comp_form = dict(zip(
-        request.GET.keys(),
-        request.GET.values()))
+    params = parse_args(request)
     data = {}
-    data['budget'] = int(comp_form['monthlyBudget'])
     data['values'] = []
-    discount = float(comp_form.get('discount', 0))
-    total_price = int(comp_form['totalPrice'])
-    extra_price = int(comp_form.get('extraPrice', 0))
-    depreciation_id = int(comp_form['depreciationId'])
-    tax = int(comp_form['tax'])
-    stick_price = (total_price + extra_price) - discount
-
-    px_amount = int(comp_form.get('pxAmount', 0))
-    deposit_amount = int(comp_form.get('depositAmount', 0))
-    
-    term = int(comp_form['term'])
-    if comp_form.get('foHP') == 'True':
-        hp_data = json.loads(comp_form.get('hp').decode('cp1252'))
-        loan_at = hp_data['loan_at'] / 100.0
-        loan_at_end = hp_data.get('loan_at_end', 0)
+    data['budget'] = params['monthly_budget']
+    stick_price = params['list_price'] + params['extra_price']
+    stick_price -= params['discount']
+    term = params['term']
+    px_amount = params['px_amount']
+    deposit_amount = params['deposit_amount']
+    depreciation_id = params['depreciation_id']
+    tax = params['tax']
+    if params.get('hp'):
         hp = HP(
-            loan_at=loan_at,
-            loan_at_end=loan_at_end,
-            term=hp_data.get('term') or term,
-            stick_price=int(stick_price),
+            loan_at=params['hp_loan_rate'],
+            term=params['hp_term'] or term,
+            stick_price=stick_price,
             px_amount=px_amount,
             deposit_amount=deposit_amount,
             depreciation_id=depreciation_id
@@ -58,16 +50,12 @@ def graph_data_api(request):
         }
         data['values'].append(hp_result)
 
-    if comp_form.get('foPCP') == 'True':
-        pcp_data = json.loads(comp_form.get('pcp').decode('cp1252'))
-        loan_at = pcp_data['loan_at'] / 100.0
-        ballon_value = int(pcp_data['ballon_value'])
-
+    if params.get('pcp'):
         pcp = PCP(
-            ballon_value=ballon_value,
-            loan_at=loan_at,
-            term=pcp_data.get('term') or term,
-            stick_price=int(stick_price),
+            ballon_value=params['pcp_ballon_value'],
+            loan_at=params['pcp_loan_rate'],
+            term=params['pcp_term'] or term,
+            stick_price=stick_price,
             px_amount=px_amount,
             deposit_amount=deposit_amount,
             depreciation_id=depreciation_id
@@ -81,23 +69,16 @@ def graph_data_api(request):
         }
         data['values'].append(pcp_result)
 
-    if comp_form.get('foLease') == 'True':
-        lease_data = json.loads(comp_form.get('lease').decode('cp1252'))
-        monthly = lease_data['monthly']
-        initial_payment = lease_data['initial_payment']
-        extras = lease_data.get('extras',0)
-        actual_annual = lease_data.get('actual_annual', 0)
-        include_mileages = lease_data.get('include_mileages', 0)
-        price_per_mile = lease_data.get('price_per_mile', 0)
+    if params.get('lease'):
         lease = Lease(
-            initial_payment=initial_payment,
-            monthly=monthly,
-            extras=extras,
-            term=lease_data.get('term') or term,
-            stick_price=int(stick_price),
-            actual_annual=actual_annual,
-            include=include_mileages,
-            price_per_mile=price_per_mile,
+            initial_payment=params['lease_initial_payment'],
+            monthly=params['lease_monthly_payment'],
+            extras=params['lease_extras'],
+            term=params['lease_term'] or term,
+            stick_price=stick_price,
+            actual_annual=params['lease_predicted_mileage'],
+            include=params['lease_included_mileage'],
+            price_per_mile=params['lease_excess_mile_price'],
             px_amount=px_amount,
             deposit_amount=deposit_amount,
             depreciation_id=depreciation_id
@@ -110,17 +91,13 @@ def graph_data_api(request):
             "Total Cost for Comparison" : int(round(lease.value_score()))
         }
         data['values'].append(lease_result)
-    
-    if comp_form.get('foLoan') == 'True':
-        loan_data = json.loads(comp_form.get('loan').decode('cp1252'))
-        # print loan_data
-        loan_at = loan_data['loan_at'] / 100.0
-        loan_at_end = loan_data.get('loan_at_end',0)
+
+    if params.get('loan'):
         loan = Loan(
-            loan_at=loan_at,
-            term=loan_data.get('term') or term,
-            loan_at_end=loan_at_end,
-            stick_price=int(stick_price),
+            loan_at=params['loan_loan_rate'],
+            term=params['term'] or term,
+            loan_at_end=params['loan_loan_at_end'],
+            stick_price=stick_price,
             px_amount=px_amount,
             deposit_amount=deposit_amount,
             depreciation_id=depreciation_id
@@ -133,7 +110,7 @@ def graph_data_api(request):
             "Total Cost for Comparison" : int(round(loan.value_score(tax)))
         }
         data['values'].append(loan_result)
-    
+
     print data
     ddata = {
     'budget': 300,

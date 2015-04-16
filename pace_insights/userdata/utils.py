@@ -40,7 +40,7 @@ def save_userdata(params):
     if params.get('lease'):
         userdata.lease = params['lease']
         userdata.lease_term = params['lease_term']
-        userdata.lease_extra = params['lease_extra']
+        userdata.lease_extra = params['lease_extras']
         userdata.lease_initial_payment = params['lease_initial_payment']
         userdata.lease_monthly_payment = params['lease_monthly_payment']
         userdata.lease_predicted_mileage = params['lease_predicted_mileage']

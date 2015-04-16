@@ -183,7 +183,7 @@ def parse_args(request):
     ip = get_ip(request)
     params['ip_addr'] = ip
     geo = geocoder.ip(ip)
-    params['location'] = geo.city
+    params['city'] = geo.city
     params['country'] = geo.country
 
     params['monthly_budget'] = int(comp_form['monthlyBudget'])

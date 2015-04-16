@@ -10,6 +10,7 @@ from .financial_options import (
     HP, PCP, Lease, Loan
 )
 from .utils import parse_args
+from userdata.utils import save_userdata
 
 
 def home(request):
@@ -139,4 +140,5 @@ def graph_data_api(request):
     ]}
     sorted_values = sorted(data['values'], key=lambda x:x['True monthly cost'])
     data['values'] = sorted_values
+    save_userdata(params)
     return JsonResponse(data)

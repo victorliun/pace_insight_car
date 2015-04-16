@@ -16,3 +16,5 @@ scrapy==0.24.5
 selenium==2.45.0
 service_identity==14.0.0
 geocoder==1.3.1
+ua-parser==0.3.6
+user-agents==0.3.2

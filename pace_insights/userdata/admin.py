@@ -5,7 +5,7 @@ from .actions import export_as_csv_action
 class UserDataAdmin(admin.ModelAdmin):
     """Admin page for UserData"""
     list_display = [
-        'list_price', 'extra_price', 'discount', 'deposit_amount',
+        'id', 'list_price', 'extra_price', 'discount', 'deposit_amount',
         'px_amount', 'term', 'monthly_budget', 'road_tax', 'hp', 'hp_term',
         'hp_loan_rate', 'pcp', 'pcp_term', 'pcp_loan_rate',
         'pcp_ballon_value', 'lease', 'lease_term', 'lease_extra',
@@ -28,14 +28,6 @@ class UserDataAdmin(admin.ModelAdmin):
     def __init__(self, *args, **kwargs):
         super(UserDataAdmin, self).__init__(*args, **kwargs)
         self.list_display_links = (None, )
-
-    # def export_as_csv(modeladmin, request, queryset):
-    #     """
-    #     This function adds an action to NewsletterArchiveWIP admin page, to make 
-    #     multiple newsletter archive reviewed.
-    #     """
-    #     pass
-    # export_as_csv.short_description = "Export as CSV"
 
 # Register your models here.
 admin.site.register(UserData, UserDataAdmin)

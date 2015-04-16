@@ -28,7 +28,7 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
 ALLOWED_HOSTS = ['.carfinancecompared.com',]
-
+GEOIP_PATH = BASE_DIR + '/data/geoip'
 
 # Application definition
 
@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'rest_framework',
     'depreciation',
+    'userdata',
 )
 
 MIDDLEWARE_CLASSES = (

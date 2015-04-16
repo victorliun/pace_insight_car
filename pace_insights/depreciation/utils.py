@@ -5,6 +5,9 @@ utils functions
 from __future__ import unicode_literals
 import random
 import logging
+import json
+import geocoder
+from ipware.ip import get_ip
 
 logger = logging.getLogger(__file__)
 
@@ -164,3 +167,65 @@ def int_to_str(int_number, separator=','):
             result.insert(0, separator)
 
     return ''.join(result)
+
+
+def parse_args(request):
+    """
+    Parse args from request, return dict.
+    """
+
+    comp_form = dict(zip(
+        request.GET.keys(),
+        request.GET.values()))
+    params = {}
+
+    params['browser_type'] = request.META['HTTP_USER_AGENT']
+    ip = get_ip(request)
+    params['ip_addr'] = ip
+    geo = geocoder.ip(ip)
+    params['city'] = geo.city
+    params['country'] = geo.country
+
+    params['monthly_budget'] = int(comp_form['monthlyBudget'])
+    params['discount'] = int(comp_form.get('discount', 0))
+    params['list_price'] = int(comp_form['totalPrice'])
+    params['extra_price'] = int(comp_form.get('extraPrice', 0))
+    params['depreciation_id'] = int(comp_form['depreciationId'])
+    params['tax'] = int(comp_form['tax'])
+
+    params['px_amount'] = int(comp_form.get('pxAmount', 0))
+    params['deposit_amount'] = int(comp_form.get('depositAmount', 0))
+
+    params['term'] = int(comp_form['term'])
+    if comp_form.get('foHP') == 'True':
+        hp_data = json.loads(comp_form.get('hp').decode('cp1252'))
+        params['hp'] = True
+        params['hp_term'] = hp_data.get('term', 0)
+        params['hp_loan_rate'] = hp_data['loan_at'] / 100.0
+
+    if comp_form.get('foPCP') == 'True':
+        pcp_data = json.loads(comp_form.get('pcp').decode('cp1252'))
+        params['pcp'] = True
+        params['pcp_term'] = pcp_data.get('term', 0)
+        params['pcp_loan_rate'] = pcp_data['loan_at'] / 100.0
+        params['pcp_ballon_value'] = pcp_data['ballon_value']
+
+    if comp_form.get('foLease') == 'True':
+        lease_data = json.loads(comp_form.get('lease').decode('cp1252'))
+        params['lease'] = True
+        params['lease_term'] = lease_data.get('term')
+        params['lease_extras'] = lease_data.get('extras', 0)
+        params['lease_initial_payment'] = lease_data['initial_payment']
+        params['lease_monthly_payment'] = lease_data['monthly']
+        params['lease_predicted_mileage'] = lease_data.get('actual_annual', 0)
+        params['lease_included_mileage'] = lease_data.get('include_mileages', 0)
+        params['lease_excess_mile_price'] = lease_data.get('price_per_mile', 0)
+
+    if comp_form.get('foLoan') == 'True':
+        loan_data = json.loads(comp_form.get('loan').decode('cp1252'))
+        params['loan'] = True
+        params['loan_term'] = loan_data.get('term', 0)
+        params['loan_loan_rate'] = loan_data['loan_at'] / 100.0
+        params['loan_loan_at_end'] = loan_data.get('loan_at_end',0)
+
+    return params

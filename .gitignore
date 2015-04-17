@@ -5,6 +5,7 @@
 
 # text editor backups
 *~
+\#*
 
 # virtualenv
 env/

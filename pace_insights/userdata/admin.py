@@ -13,7 +13,7 @@ class UserDataAdmin(admin.ModelAdmin):
         'lease_predicted_mileage', 'lease_included_mileage',
         'lease_excess_mile_price', 'loan', 'loan_term',
         'loan_loan_rate', 'loan_loan_at_end', 'ip_addr',
-        'city', 'country', 'create_time', 'show_browser',
+        'city', 'country', 'create_time', 'depreciation_id', 'show_browser',
     ]
     actions = [export_as_csv_action('CSV Export',
         fields=list_display[:-1].append('browser_type')),]

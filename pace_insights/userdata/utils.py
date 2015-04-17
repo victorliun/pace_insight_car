@@ -22,6 +22,7 @@ def save_userdata(params):
     userdata.term = params['term']
     userdata.monthly_budget = params['monthly_budget']
     userdata.road_tax = params['tax']
+    userdata.depreciation_id = params['depreciation_id']
 
     # hp options
     if params.get('hp'):

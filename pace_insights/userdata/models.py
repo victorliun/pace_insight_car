@@ -21,6 +21,7 @@ class UserData(models.Model):
     term = models.IntegerField(default=1)
     monthly_budget = models.IntegerField(default=0)
     road_tax = models.IntegerField(default=0)
+    depreciation_id = models.IntegerField(default=0)
 
     # hp options
     hp = models.BooleanField(default=False)

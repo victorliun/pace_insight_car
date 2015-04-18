@@ -3,11 +3,13 @@
 Models for depreciation.
 '''
 import logging
+import json
 from datetime import datetime
 
 from django.db import models
 from user_agents import parse
 from depreciation.models import Depreciation
+from depreciation.utils import to_int
 
 class UserData(models.Model):
     """
@@ -22,9 +24,10 @@ class UserData(models.Model):
     monthly_budget = models.IntegerField(default=0)
     road_tax = models.IntegerField(default=0)
     depreciation_id = models.IntegerField(default=0)
-    carmake_id = models.IntegerField(default=0)
-    carversion_id = models.IntegerField(default=0)
-    carmodel_id = models.IntegerField(default=0)
+    carmake_name = models.CharField(max_length=255, blank=True, null=True)
+    carversion_name = models.CharField(max_length=255, blank=True, null=True)
+    carmodel_name = models.CharField(max_length=255, blank=True, null=True)
+    depreciation = models.CharField(max_length=255, blank=True, null=True)
 
     # hp options
     hp = models.BooleanField(default=False)
@@ -66,7 +69,9 @@ class UserData(models.Model):
 
     def save(self, *args, **kwargs):
         depreciation = Depreciation.objects.get(pk=self.depreciation_id)
-        self.carversion_id = depreciation.car_version.pk
-        self.carmodel_id = depreciation.car_version.car_model.pk
-        self.carmake_id = depreciation.car_version.car_model.car_make.pk
+        self.depreciation = json.dumps([
+           to_int(price) for price in depreciation.get_addon_data()])
+        self.carversion_name = depreciation.car_version.name
+        self.carmodel_name = depreciation.car_version.car_model.name
+        self.carmake_name = depreciation.car_version.car_model.car_make.name
         return super(UserData, self).save(*args, **kwargs)

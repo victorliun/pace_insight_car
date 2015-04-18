@@ -23,3 +23,11 @@ test:
 setup:
 	$(VIRTUALENV) && pip install -r requirements.txt
 .PHONY : setup
+
+migrate:
+	$(VIRTUALENV) && python pace_insights/manage.py migrate
+.PHONY : migrate
+
+make-migrates:
+	$(VIRTUALENV) && python pace_insights/manage.py makemigrations
+.PHONY : make-migrates

@@ -7,7 +7,7 @@ from datetime import datetime
 
 from django.db import models
 from user_agents import parse
-
+from depreciation.models import Depreciation
 
 class UserData(models.Model):
     """
@@ -22,6 +22,9 @@ class UserData(models.Model):
     monthly_budget = models.IntegerField(default=0)
     road_tax = models.IntegerField(default=0)
     depreciation_id = models.IntegerField(default=0)
+    carmake_id = models.IntegerField(default=0)
+    carversion_id = models.IntegerField(default=0)
+    carmodel_id = models.IntegerField(default=0)
 
     # hp options
     hp = models.BooleanField(default=False)
@@ -60,3 +63,10 @@ class UserData(models.Model):
     @property
     def user_agent(self):
         return parse(self.browser_type)
+
+    def save(self, *args, **kwargs):
+        depreciation = Depreciation.objects.get(pk=self.depreciation_id)
+        self.carversion_id = depreciation.car_version.pk
+        self.carmodel_id = depreciation.car_version.car_model.pk
+        self.carmake_id = depreciation.car_version.car_model.car_make.pk
+        return super(UserData, self).save(*args, **kwargs)

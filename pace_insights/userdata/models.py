@@ -32,12 +32,12 @@ class UserData(models.Model):
     # hp options
     hp = models.BooleanField(default=False)
     hp_term = models.IntegerField(null=True)
-    hp_loan_rate = models.IntegerField()
+    hp_loan_rate = models.FloatField(blank=True, null=True)
 
     # pcp options
     pcp = models.BooleanField(default=False)
     pcp_term = models.IntegerField(null=True)
-    pcp_loan_rate = models.IntegerField(null=True)
+    pcp_loan_rate = models.FloatField(blank=True, null=True)
     pcp_ballon_value = models.IntegerField(null=True)
     
     # lease options
@@ -53,7 +53,7 @@ class UserData(models.Model):
     # loan options
     loan = models.BooleanField(default=False)
     loan_term = models.IntegerField(null=True)
-    loan_loan_rate = models.IntegerField(null=True)
+    loan_loan_rate = models.FloatField(blank=True, null=True)
     loan_loan_at_end = models.IntegerField(null=True)
 
     # general data
